@@ -1,0 +1,29 @@
+.navbar {
+    height: 70px;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 38px;
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
+    align-items: center;
+  }
+  
+  .navbar--menu {
+    display: flex;
+    gap: 20px;
+    list-style-type: none;
+  }
+  
+  .navbar--menu li {
+    cursor: pointer;
+  }
+  
+  .navbar--menu a{
+    color: black;
+    text-decoration: none;
+    transition: 0.2s;
+  }
+  
+  .navbar--menu li:hover,
+  .navbar--menu li a:hover {
+    color: rgb(114, 107, 214);
+  }

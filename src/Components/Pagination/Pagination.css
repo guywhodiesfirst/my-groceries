@@ -1,0 +1,30 @@
+.pagination--btn-group {
+    margin: 20px 0px 0px 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.pagination--btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid rgb(118, 118, 184);
+    background-color: white;
+    color: rgb(118, 118, 184);
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 200;
+    font-size: 20px;
+    font-family: 'Noto Sans';
+    transition: 0.3s;
+}
+
+.pagination--btn:hover,
+.pagination--btn.active {
+    background-color: rgb(118, 118, 184);
+    color: white;
+}
+
+.pagination--btn:hover {
+    transform: scale(1.2);
+}

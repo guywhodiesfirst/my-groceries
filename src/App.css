@@ -1,0 +1,61 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Poppins', 'Noto Sans',sans-serif;
+  overflow-y: scroll;
+}
+
+.gray {
+  color: #918E9B;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+h2 {
+  font-size: 0.75rem;
+  font-weight: normal;
+}
+
+.poppins {
+  font-family: 'Poppins';
+}
+
+.noto-sans {
+  font-family: 'Noto Sans';
+}
+
+.orange {
+  background-color: rgb(255, 174, 0);
+}
+
+.red {
+  background-color: rgb(235, 51, 51);
+}
+
+.btn {
+  cursor: pointer;
+  background-color: white;
+  font-size: 1rem;
+  font-family: 'Noto Sans';
+  color: rgb(118, 118, 184);
+  font-weight: 400;
+  padding: 10px;
+  border: 1px solid rgb(118, 118, 184);
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  color: white;
+  background-color: rgb(118, 118, 184);
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+}

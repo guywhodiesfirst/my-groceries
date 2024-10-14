@@ -1,0 +1,13 @@
+.main-page {
+    display: grid;
+    grid-template-columns: 5fr 1fr;
+    max-width: 1600px;
+    padding: 20px;
+}
+  
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}

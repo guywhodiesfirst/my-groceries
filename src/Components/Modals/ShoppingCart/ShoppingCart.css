@@ -1,0 +1,12 @@
+.shopping-cart--order-list {
+    width: 100%;
+    height: 450px;
+    overflow-y: auto;
+    padding-bottom: 40px;
+}
+
+.shopping-cart--title {
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+}

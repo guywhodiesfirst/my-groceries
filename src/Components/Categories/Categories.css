@@ -1,0 +1,16 @@
+.categories-container {
+    margin-top: 75px;
+}
+
+.categories-container button {
+    margin: 5px;
+}
+
+.categories-container button:hover {
+    transform: scale(0.95);
+}
+
+.categories-container h3 {
+    margin: 0 0 10px 5px;
+    font-size: 1.5rem;
+}
