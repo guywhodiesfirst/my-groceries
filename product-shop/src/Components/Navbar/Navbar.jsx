@@ -10,8 +10,8 @@ export default function Navbar() {
             <h1>my.groceries</h1>
             <ul className="navbar--menu">
                 <li onClick={() => setCartIsOpen(true)}>Cart</li>
-                <li><a href="#catalog">Browse catalog</a></li>
-                <li><a href="#account">Manage account</a></li>
+                <li><a href="/catalog">Browse catalog</a></li>
+                <li><a href="/account">Manage account</a></li>
             </ul>
             {cartIsOpen && (
                 <ShoppingCart

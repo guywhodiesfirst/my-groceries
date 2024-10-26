@@ -13,9 +13,12 @@ export default function ShoppingCartOrderList() {
                 {orders.length === 0 ? (
                     <p>Here your cart orders will be displayed</p>
                 ) : (
-                    orders.map((order, index) => (
-                        <ShoppingCartOrder key={index} itemData={order} />
-                    ))
+                    <>
+                        {orders.map((order, index) => (
+                            <ShoppingCartOrder key={index} itemData={order} />
+                        ))}
+                        <button className="btn" style={{marginTop: "12px", float: "right"}}>Proceed to payment</button>
+                    </>
                 )}
             </div>
         </>
