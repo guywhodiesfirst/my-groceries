@@ -24,7 +24,9 @@ def register():
         'email': email,
         'password': hashedPassword,
         'isVerified': False,
-        'isAdmin': False,
+        'is_admin': False,
+        'is_runner': False,
+        'is_blocked': False,
         'orders': [],
         'phoneNumber': "",
         'name': name,
@@ -63,7 +65,7 @@ def login():
 def reset_password():
     from app import mongo
     email = request.json.get('email')
-    new_password = request.json.get('new_password')
+    new_password = request.json.get('new password')
 
     hashedPassword = hashpw(new_password.encode('utf-8'), gensalt())
 
@@ -83,6 +85,7 @@ def profile():
         return jsonify({
             'name': user.get('name'),
             'surname': user.get('surname'),
+            'username': user.get('username'),
             'phoneNumber': user.get('phoneNumber'),
             'cardNumber': user.get('cardNumber'),
             'cardDate': user.get('cardDate'),
@@ -96,6 +99,7 @@ def profile():
         # Отримання даних з запиту
         phoneNumber = request.json.get('phoneNumber')
         name = request.json.get('name')
+        username = request.json.get('username')
         surname = request.json.get('surname')
         cardNumber = request.json.get('cardNumber')
         cardDate = request.json.get('cardDate')
@@ -116,6 +120,7 @@ def profile():
                     'phoneNumber': phoneNumber,
                     'name': name,
                     'surname': surname,
+                    'username': username,
                     'cardNumber': cardNumber,
                     'cardDate': cardDate,
                     'cardCVV': cardCVV,

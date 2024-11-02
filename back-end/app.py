@@ -7,7 +7,7 @@ app = Flask(__name__)
 app.config.from_object(Config)
 mongo = PyMongo(app)
 jwt = JWTManager(app)
-# Импорт маршрутов после инициализации приложения и MongoDB
+# Імпорт маршрутів після ініціалізації застосунку и MongoDB
 from routes import authRoutes, productRoutes, cartRoutes, adminRoutes
 
 # Регистрация Blueprint'ов
