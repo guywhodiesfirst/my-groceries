@@ -1,6 +1,10 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from bson import ObjectId
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from datetime import datetime
 def checkadmin(currentUser):
     from app import mongo
     user = mongo.db.users.find_one({'email': currentUser})
@@ -11,6 +15,13 @@ def checkadmin(currentUser):
 
 
 adminRoutes = Blueprint('admin', __name__)
+
+# Дані для SMTP сервера
+SMTP_SERVER = "smtp.gmail.com"
+SMTP_PORT = 587
+EMAIL_SENDER = "mrgumor2017@gmail.com"
+EMAIL_PASSWORD = "gqzx swgv cyyo bvle"
+
 
 @adminRoutes.route('/admin/product', methods=['PUT'])
 @jwt_required()
@@ -150,7 +161,8 @@ def setUser():
 
         result1 = mongo.db.users.update_one({'_id': userID}, {'$set': {'is_admin': bool(isadmin)}})
         result2 = mongo.db.users.update_one({'_id': userID}, {'$set': {'is_runner': bool(isrunner)}})
-        result3 = mongo.db.users.update_one({'_id': userID}, {'$set': {'is_runner': bool(isblocked)}})
+        result3 = mongo.db.users.update_one({'_id': userID}, {'$set': {'is_blocked': bool(isblocked)}})
+
         if result1.modified_count > 0:
             return jsonify(message="Статус користувача оновлено (адмін)"), 200
         elif result2.modified_count > 0:
@@ -234,5 +246,105 @@ def getBlocked():
     users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersRunnersCursor]
     try:
         return jsonify(users), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+def send_order_status_email(email, order_id, status):
+    subject = f"Оновлення статусу замовлення #{order_id}"
+    body = f"Ваше замовлення #{order_id} зараз має статус: {status}."
+
+    msg = MIMEMultipart()
+    msg["From"] = EMAIL_SENDER
+    msg["To"] = email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    try:
+        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            server.starttls()
+            server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+            server.sendmail(EMAIL_SENDER, email, msg.as_string())
+        return jsonify({'message': 'Повідомлення про оновлення статусу надіслано.'}), 200
+    except Exception as e:
+        return jsonify({'message': 'Помилка при надсиланні email'}), 400
+
+
+def update_order_status(user_email, order_id, new_status):
+    from app import mongo
+
+    result = mongo.db.users.update_one(
+        {'email': user_email, 'orders._id': ObjectId(order_id)},
+        {'$set': {'orders.$.status': new_status,
+                  'orders.$.statusUpdateDate': datetime.now().strftime('%Y-%m-%d %H:%M:%S')}}
+    )
+
+    if result.modified_count > 0:
+        # Надіслати сповіщення користувачеві про оновлення статусу
+        send_order_status_email(user_email, order_id, new_status)
+        return True
+    else:
+        return jsonify({'message': 'Не вдалося оновити статус замовлення.'}), 400
+        return False
+
+@adminRoutes.route('/admin/update_order_status/<order_id>', methods=['POST'])
+@jwt_required()
+def admin_update_order_status(order_id):
+    currentUser = get_jwt_identity()
+    if not checkadmin(currentUser):  # Функція для перевірки прав адміністратора
+        return jsonify(message="Недостатньо прав доступу."), 403
+
+    user_email = request.json.get('email')
+    new_status = request.json.get('status')
+
+    valid_statuses = ["Pending", "Confirmed", "Processing", "Delivered"]
+    if new_status not in valid_statuses:
+        return jsonify(message="Невірний статус замовлення."), 400
+
+    if update_order_status(user_email, order_id, new_status):
+        return jsonify(message=f"Статус замовлення оновлено на '{new_status}'"), 200
+    else:
+        return jsonify(message="Помилка при оновленні статусу замовлення."), 500
+
+@adminRoutes.route('/admin/order_statistics', methods=['GET'])
+@jwt_required()
+def get_order_statistics():
+    from app import mongo
+    currentUser = get_jwt_identity()
+    if not checkadmin(currentUser):
+        return jsonify(message="Недостатньо прав доступу."), 403
+
+    try:
+        # Total orders
+        total_orders = mongo.db.orders.count_documents({})
+
+        total_sales = sum(order.get("total_price", 0) for order in mongo.db.orders.find({}, {"total_price": 1}))
+
+        order_status_counts = mongo.db.orders.aggregate([
+            {"$group": {"_id": "$status", "count": {"$sum": 1}}}
+        ])
+
+        status_counts = {status["_id"]: status["count"] for status in order_status_counts}
+
+        current_month = datetime.now().month
+        monthly_orders = mongo.db.orders.count_documents({
+            "order_date": {"$gte": datetime(datetime.now().year, current_month, 1)}
+        })
+
+
+        monthly_sales = sum(order.get("total_price", 0) for order in mongo.db.orders.find({
+            "order_date": {"$gte": datetime(datetime.now().year, current_month, 1)}
+        }, {"total_price": 1}))
+
+
+        statistics = {
+            "total_orders": total_orders,
+            "total_sales": total_sales,
+            "status_counts": status_counts,
+            "monthly_orders": monthly_orders,
+            "monthly_sales": monthly_sales,
+        }
+
+        return jsonify(statistics), 200
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
