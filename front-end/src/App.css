@@ -55,7 +55,26 @@ h2 {
   background-color: rgb(118, 118, 184);
 }
 
+.btn:disabled {
+  background-color: #b1b1b1;
+  cursor: not-allowed;
+  color: rgb(66, 66, 66);
+  border-color: grey
+}
 .wrapper {
   display: flex;
   justify-content: center;
+}
+
+.text-input {
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid gainsboro;
+  padding-left: 6px;
+  flex-grow: 1;
+}
+
+.text-input:focus {
+  outline: none;
+  border: 1px solid rgb(118, 118, 184);
 }

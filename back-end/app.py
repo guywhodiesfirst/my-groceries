@@ -2,8 +2,10 @@ from flask import Flask
 from flask_pymongo import PyMongo
 from config import Config
 from flask_jwt_extended import JWTManager
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object(Config)
 mongo = PyMongo(app)
 jwt = JWTManager(app)

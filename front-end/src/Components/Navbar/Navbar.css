@@ -27,3 +27,7 @@
   .navbar--menu li a:hover {
     color: rgb(114, 107, 214);
   }
+
+  .navbar--logo {
+    cursor: pointer;
+  }

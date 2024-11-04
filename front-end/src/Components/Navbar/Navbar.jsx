@@ -7,11 +7,12 @@ export default function Navbar() {
     
     return (
         <nav className="navbar">
-            <h1>my.groceries</h1>
+            <h1 className='navbar--logo'>my.groceries</h1>
             <ul className="navbar--menu">
                 <li onClick={() => setCartIsOpen(true)}>Cart</li>
                 <li><a href="/catalog">Browse catalog</a></li>
                 <li><a href="/account">Manage account</a></li>
+                <li><a href="/login">Sign in</a></li>
             </ul>
             {cartIsOpen && (
                 <ShoppingCart
