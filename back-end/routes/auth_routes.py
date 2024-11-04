@@ -7,10 +7,11 @@ from email.mime.text import MIMEText
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from bcrypt import hashpw, gensalt, checkpw
+from bson.objectid import ObjectId
 
 authRoutes = Blueprint('auth', __name__)
 
-# Дані для SMTP сервера (приклад для Gmail)
+# Дані для SMTP сервера
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 EMAIL_SENDER = "mrgumor2017@gmail.com"
@@ -275,3 +276,35 @@ def profile():
             return jsonify(message="Користувача не знайдено."), 404
 
         return jsonify(message="Профіль успішно оновлено."), 200
+
+def convert_objectid_to_str(data):
+    if isinstance(data, dict):
+        return {key: convert_objectid_to_str(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        return [convert_objectid_to_str(item) for item in data]
+    elif isinstance(data, ObjectId):
+        return str(data)
+    return data
+
+@authRoutes.route('/order_history', methods=['GET'])
+@jwt_required()
+def view_order_history():
+    from app import mongo
+    currentUser = get_jwt_identity()
+
+    # Знаходження по емайл
+    user = mongo.db.users.find_one({'email': currentUser})
+
+    # Перевірка чи користувач має історію замрвоень
+    if not user or 'orders' not in user:
+        return jsonify(message="Історію замовлень не знайдено."), 404
+
+    # Отримання історі замовлень
+    orders = user.get('orders', [])
+
+    orders = convert_objectid_to_str(orders)
+
+    return jsonify(orderHistory=orders), 200
+
+
+
