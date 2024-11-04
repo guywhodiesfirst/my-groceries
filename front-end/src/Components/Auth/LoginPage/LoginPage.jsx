@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import "./LoginPage.css"
 import ErrorPopup from '../../Modals/ErrorPopup/ErrorPopup';
 
-export default function RegistrationPage() {
+export default function Login() {
     const [formData, setFormData] = useState({
-        name: '',
-        surname: '',
-        username: '',
         email: '',
         password: '',
-        passwordConfirm: '',
     });
 
     const [errorPopupIsOpen, setErrorPopupIsOpen] = useState(false);
@@ -26,14 +22,8 @@ export default function RegistrationPage() {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        if(formData.password !== formData.passwordConfirm) {
-            setErrorPopupIsOpen(true)
-            setErrorPopupMessage("Password fields don't match!")
-            return
-        }
-
         try {
-        const response = await fetch('http://localhost:5000/register', {
+        const response = await fetch('http://localhost:5000/login', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'
@@ -43,15 +33,16 @@ export default function RegistrationPage() {
 
         if (response.ok) {
             const data = await response.json();
-            alert(data.message);
+            localStorage.setItem("access_token", data.access_token)
+            alert("Ви успішно увійшли в систему!");
         } else {
             const errorData = await response.json();
             setErrorPopupIsOpen(true)
             setErrorPopupMessage(errorData.message);
         }
         } catch (error) {
-            console.error('Error during registration:', error);
-            alert('Сталася помилка під час реєстрації.');
+            setErrorPopupIsOpen(true)
+            setErrorPopupMessage('Error occured during authentification.');
         }
     };
 
@@ -59,24 +50,20 @@ export default function RegistrationPage() {
 
     return (
         <>
-            <div className="registration-page">
-                <div className="registration--form-container">
-                    <h2 className="form--header">Sign up</h2>
-                    <form className="registration--form" autoComplete="off" onSubmit={handleSubmit}>
-                        <div className="registration--form-block">   
-                            <input className="text-input" type="text" name="name" placeholder="First name" onChange={handleChange} required />
-                            <input className="text-input" type="text" name="surname" placeholder="Last name" onChange={handleChange} required />
-                        </div>
-                        <input className="text-input" type="text" name="username" placeholder="Username" onChange={handleChange} required />
-                        <input className="text-input" type="email" name="email" placeholder="E-mail" onChange={handleChange} required />
-                        <div className="registration--form-block">
+            <div className="auth--page">
+                <div className="auth--wrapper">
+                    <div className="auth--form-container">
+                        <h2 className="auth--form-header">Sign in</h2>
+                        <form className="auth--form" autoComplete="off" onSubmit={handleSubmit}>
+                            <input className="text-input" type="email" name="email" placeholder="E-mail" onChange={handleChange} required />
                             <input className="text-input" type="password" name="password" placeholder="Password" onChange={handleChange} required />
-                            <input className="text-input" type="password" name="passwordConfirm" placeholder="Confirm password" onChange={handleChange} required />
-                        </div>
-                        <div className="registration--btn-container"> 
-                            <button type="submit" className="btn registration--btn" disabled={!allFieldsFilled}>Sign up</button>
-                        </div>
-                    </form>
+                            
+                            <div className="auth--btn-container"> 
+                                <button type="submit" className="btn auth--btn" disabled={!allFieldsFilled}>Sign in</button>
+                            </div>
+                        </form>
+                        <p className='auth--paragraph'>Don't have an account? <a href='/register'>Sign up!</a></p>
+                    </div>
                 </div>
             </div>
             <ErrorPopup 

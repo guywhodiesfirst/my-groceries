@@ -12,7 +12,7 @@ export default function Navbar() {
                 <li onClick={() => setCartIsOpen(true)}>Cart</li>
                 <li><a href="/catalog">Browse catalog</a></li>
                 <li><a href="/account">Manage account</a></li>
-                <li><a href="/register">Sign in</a></li>
+                <li><a href="/login">Sign in</a></li>
             </ul>
             {cartIsOpen && (
                 <ShoppingCart

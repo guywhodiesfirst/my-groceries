@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import "./RegistrationPage.css"
+import "../Auth.css"
 import ErrorPopup from '../../Modals/ErrorPopup/ErrorPopup';
 
 export default function RegistrationPage() {
@@ -50,8 +51,8 @@ export default function RegistrationPage() {
             setErrorPopupMessage(errorData.message);
         }
         } catch (error) {
-            console.error('Error during registration:', error);
-            alert('Сталася помилка під час реєстрації.');
+            setErrorPopupIsOpen(true)
+            setErrorPopupMessage('Error occured during registration.');
         }
     };
 
@@ -59,25 +60,29 @@ export default function RegistrationPage() {
 
     return (
         <>
-            <div className="registration-page">
-                <div className="registration--form-container">
-                    <h2 className="form--header">Sign up</h2>
-                    <form className="registration--form" autoComplete="off" onSubmit={handleSubmit}>
-                        <div className="registration--form-block">   
-                            <input className="text-input" type="text" name="name" placeholder="First name" onChange={handleChange} required />
-                            <input className="text-input" type="text" name="surname" placeholder="Last name" onChange={handleChange} required />
-                        </div>
-                        <input className="text-input" type="text" name="username" placeholder="Username" onChange={handleChange} required />
-                        <input className="text-input" type="email" name="email" placeholder="E-mail" onChange={handleChange} required />
-                        <div className="registration--form-block">
-                            <input className="text-input" type="password" name="password" placeholder="Password" onChange={handleChange} required />
-                            <input className="text-input" type="password" name="passwordConfirm" placeholder="Confirm password" onChange={handleChange} required />
-                        </div>
-                        <div className="registration--btn-container"> 
-                            <button type="submit" className="btn registration--btn" disabled={!allFieldsFilled}>Sign up</button>
-                        </div>
-                    </form>
+            <div className="auth--page">
+                <div className="auth--wrapper">
+                    <div className="auth--form-container">
+                        <h2 className="auth--form-header">Sign up</h2>
+                        <form className="auth--form" autoComplete="off" onSubmit={handleSubmit}>
+                            <div className="registration--form-block">   
+                                <input className="text-input" type="text" name="name" placeholder="First name" onChange={handleChange} required />
+                                <input className="text-input" type="text" name="surname" placeholder="Last name" onChange={handleChange} required />
+                            </div>
+                            <input className="text-input" type="text" name="username" placeholder="Username" onChange={handleChange} required />
+                            <input className="text-input" type="email" name="email" placeholder="E-mail" onChange={handleChange} required />
+                            <div className="registration--form-block">
+                                <input className="text-input" type="password" name="password" placeholder="Password" onChange={handleChange} required />
+                                <input className="text-input" type="password" name="passwordConfirm" placeholder="Confirm password" onChange={handleChange} required />
+                            </div>
+                            <div className="auth--btn-container"> 
+                                <button type="submit" className="btn auth--btn" disabled={!allFieldsFilled}>Sign up</button>
+                            </div>
+                        </form>
+                        <p className='auth--paragraph'>Already have an account? <a href='/login'>Sign in!</a></p>
+                    </div>
                 </div>
+                
             </div>
             <ErrorPopup 
                 isOpen={errorPopupIsOpen}

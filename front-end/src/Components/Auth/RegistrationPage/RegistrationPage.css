@@ -1,50 +1,5 @@
-.registration-page {
-    max-width: 1600px;
-    padding: 20px;
-    margin: 80px; 
-    margin-top: 130px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60vh;
-    box-sizing: border-box;
-}
-
-.registration--form-container {
-    margin: 20px;
-    width: 700px; 
-    padding: 20px;
-    border-radius: 20px;
-    border: 1px solid rgb(118, 118, 184);
-    box-sizing: border-box;
-    text-align: center;
-}
-
-.form--header {
-    font-weight: bold;
-    font-size: 18px;
-    margin-top: 0;
-    margin-bottom: 40px;
-}
-
-.registration--form {
-    display: flex;
-    flex-direction: column;
-    gap: 10px
-}
-
 .registration--form-block {
     width: 100%;
     display: flex;
     gap: 10px;   
-}
-
-.registration--btn-container {
-    margin-top: 14px;
-    display: flex;
-    justify-content: center;
-}
-
-.registration--btn {
-    padding: 10px px 10px 20px;
 }
