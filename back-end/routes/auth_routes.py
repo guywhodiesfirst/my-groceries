@@ -86,7 +86,10 @@ def register():
 
     # Перевірка наявності користувача
     if mongo.db.users.find_one({'email': email}):
-        return jsonify({'message': 'Користувач вже існує'}), 409
+        return jsonify({'message': 'User with this email already exists'}), 409
+    
+    if mongo.db.users.find_one({'username': username}):
+        return jsonify({'message': 'User with this username already exists'}), 409
 
     mongo.db.users.insert_one({
         'email': email,
@@ -120,7 +123,7 @@ def request_verification():
 
     user = mongo.db.users.find_one({'email': email})
     if not user:
-        return jsonify({'message': 'Користувача не знайдено'}), 404
+        return jsonify({'message': 'User not found'}), 404
 
     # Генерація і надсилання нового коду підтвердження
     verification_code = generate_verification_code(email)

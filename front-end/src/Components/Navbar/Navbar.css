@@ -5,6 +5,7 @@
     padding: 0px 38px;
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.1);
     align-items: center;
+    position: sticky;
   }
   
   .navbar--menu {
@@ -26,4 +27,8 @@
   .navbar--menu li:hover,
   .navbar--menu li a:hover {
     color: rgb(114, 107, 214);
+  }
+
+  .navbar--logo {
+    cursor: pointer;
   }

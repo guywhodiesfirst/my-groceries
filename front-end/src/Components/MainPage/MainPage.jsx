@@ -5,7 +5,7 @@ import { useState } from "react"
 import Pagination from "../Pagination/Pagination"
 import Categories from "../Categories/Categories"
 
-export default function App() {
+export default function MainPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState(8)
 

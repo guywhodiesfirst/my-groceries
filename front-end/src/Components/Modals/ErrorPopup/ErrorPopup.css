@@ -1,0 +1,21 @@
+.error--wrapper {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+  }
+
+  
+.error--icon {
+    width: 100%;
+    object-fit: contain;
+    height: 450px;
+    border-radius: 10px;
+    margin-bottom: 9px;
+  }
+
+.error--content {
+    margin-left: 20px;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+}
