@@ -1,0 +1,30 @@
+.search {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.title {
+    margin: 0;
+}
+
+.search-bar {
+    background-color: #f5f7fa;
+    border-radius: 8px;
+    padding: 8px 12px;
+}
+
+.search-bar input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 1.2rem;
+    color: #333;
+    height: 2rem;
+}
+
+.search-bar input::placeholder {
+    color: #aaa;
+}

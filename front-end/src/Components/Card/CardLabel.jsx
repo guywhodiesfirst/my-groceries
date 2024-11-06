@@ -1,6 +1,6 @@
 import './Card.css';
 
-export default function CardLabel({ unitsLeft }) {  // Destructure unitsLeft from props
+export default function CardLabel({ unitsLeft }) {
     let label;
     if (unitsLeft === 0) {
         label = {

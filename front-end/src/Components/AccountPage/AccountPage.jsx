@@ -1,6 +1,6 @@
 export default function AccountPage() {
-    return(
-        <>
-        </>
-    )
+  return (
+    <>
+    </>
+  );
 }

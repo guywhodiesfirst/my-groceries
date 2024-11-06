@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './Navbar.css'
-import ShoppingCart from '../Modals/ShoppingCart/ShoppingCart'
+import ShoppingCart from '../../Modals/ShoppingCart/ShoppingCart.jsx'
 
 export default function Navbar() {
     const [cartIsOpen, setCartIsOpen] = useState(false)
@@ -11,7 +11,7 @@ export default function Navbar() {
             <ul className="navbar--menu">
                 <li onClick={() => setCartIsOpen(true)}>Cart</li>
                 <li><a href="/catalog">Browse catalog</a></li>
-                <li><a href="/account">Manage account</a></li>
+                <li><a href="/account">Account</a></li>
                 <li><a href="/login">Sign in</a></li>
             </ul>
             {cartIsOpen && (
