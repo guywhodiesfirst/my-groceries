@@ -68,7 +68,7 @@ def cart():
 
         # Перевіряємо, чи існує продукт та достатня його кількість
         if not product or product.get("quantity", 0) < quantityToAdd:
-            return jsonify(message="Product not found or insufficient stock."), 404
+            return jsonify(message="Продукт не знайдено або він закінчився."), 404
 
         # Перевіряємо, чи є продукт вже у кошику
         cartItem = mongo.db.users.find_one(
@@ -87,7 +87,7 @@ def cart():
                 {'$addToSet': {'cart': {'productId': product['_id'], 'quantity': quantityToAdd}}}
                 # Додаємо новий продукт у кошик
             )
-        return jsonify(message="Product added to cart"), 201
+        return jsonify(message="Продукт додано до кошика"), 201
 
 
     if request.method == 'GET':
@@ -104,7 +104,7 @@ def cart():
             {'email': currentUser},
             {'$addToSet': {'cart': {'productId': ObjectId(productId), 'quantity': 1}}}
         )
-        return jsonify(message="Product added to cart"), 201
+        return jsonify(message="Продукт додано до кошика"), 201
 
     if request.method == 'DELETE':
         productId = request.json.get('productId')
