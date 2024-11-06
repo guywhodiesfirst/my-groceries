@@ -76,7 +76,7 @@ def deleteProduct():
 
     return jsonify(message="Продукт видалено успішно."), 200
 
-@adminRoutes.route('/admin/product', methods=['PUT'])
+@adminRoutes.route('/admin/product', methods=['POST'])
 @jwt_required()
 def editProduct():
     from app import mongo
@@ -117,9 +117,9 @@ def editProduct():
 
     return jsonify(message="Продукт оновлено успішно"), 200
 
-@adminRoutes.route('/admin/getAllUsersNick', methods=['GET']) # Функція для виведення ніків та ID всіх користувачів
+@adminRoutes.route('/admin/users', methods=['GET']) # Функція для виведення ніків та ID всіх користувачів
 @jwt_required()
-def getAllUsers():
+def getUsers():
     from app import mongo
     currentUser = get_jwt_identity()
 
@@ -135,7 +135,7 @@ def getAllUsers():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-@adminRoutes.route('/admin/adminPanel', methods=['PUT']) #Функція для налаштування рівня доступа
+@adminRoutes.route('/admin/adminPanel', methods=['POST']) #Функція для налаштування рівня доступа
 @jwt_required()
 def setUser():
     from app import mongo
@@ -175,41 +175,6 @@ def setUser():
         return jsonify(message="Користувача не знайдено"), 404
 
 
-@adminRoutes.route('/admin/adminPanel', methods=['GET']) #Функція для виведення списку адміністраторів
-@jwt_required()
-def getAdmins():
-    from app import mongo
-    currentUser = get_jwt_identity()
-
-    if not checkadmin(currentUser):
-        return jsonify(message="Потрібні права адміністратора"), 403
-
-    usersAdminCursor = mongo.db.users.find({}, {"_id": 1, "username": 1, "is_admin": True})
-    users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersAdminCursor]
-
-    try:
-        return jsonify(users), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
-@adminRoutes.route('/admin/adminPanelRunners', methods=['GET'])#Функція для виведення списку кур'єрів
-@jwt_required()
-def getRunners():
-    from app import mongo
-    currentUser = get_jwt_identity()
-
-    if not checkadmin(currentUser):
-        return jsonify(message="Потрібні права адміністратора"), 403
-
-    usersRunnersCursor = mongo.db.users.find({"is_runner": True},{})
-    users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersRunnersCursor]
-    try:
-        return jsonify(users), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-
 @adminRoutes.route('/admin/adminPanel', methods=['DELETE'])#Функція для видалення користувача
 @jwt_required()
 def delAdmins():
@@ -233,17 +198,31 @@ def delAdmins():
     else:
         return jsonify("Помилка видалення користувача"), 500
 
-@adminRoutes.route('/admin/adminPanelBlocked', methods=['GET']) #Функція для перегляду заблокованих користувачів
+@adminRoutes.route('/admin/adminPanel', methods=['GET'])
 @jwt_required()
-def getBlocked():
+def getTypesUsers():
     from app import mongo
-    currentUser = get_jwt_identity()
+    import re
 
+    currentUser = get_jwt_identity()
     if not checkadmin(currentUser):
         return jsonify(message="Потрібні права адміністратора"), 403
 
-    usersRunnersCursor = mongo.db.users.find({"is_blocked": True},{})
-    users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersRunnersCursor]
+    # Отримаємо фільтр
+    userType = request.json.get('userType')
+
+    if userType == 'admin':
+        usersCursor = mongo.db.users.find({"is_admin": True}, {"_id": 1, "username": 1})
+    elif userType == 'runner':
+        usersCursor = mongo.db.users.find({"is_runner": True}, {"_id": 1, "username": 1})
+    elif userType == 'blocked':
+        usersCursor = mongo.db.users.find({"is_blocked": True}, {"_id": 1, "username": 1})
+    else:
+        return jsonify(message="Невідомий тип користувача"), 400
+
+    # Формуємо список
+    users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersCursor]
+
     try:
         return jsonify(users), 200
     except Exception as e:
