@@ -1,6 +1,6 @@
 import Navbar from "./Components/Navbar/Navbar"
 import "./App.css"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import MainPage from "./Components/MainPage/MainPage"
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import AccountPage from "./Components/AccountPage/AccountPage"
@@ -12,10 +12,17 @@ export const Context = React.createContext()
 export default function App() {
   const [orders, setOrders] = useState([])
   const [items, setItems] = useState([])
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    setIsAuthenticated(!!token)
+    console.log(isAuthenticated)
+  }, []);
 
   return (
     <Router>
-        <Context.Provider value={[orders, setOrders, items, setItems]}>
+        <Context.Provider value={{orders, setOrders, items, setItems, isAuthenticated, setIsAuthenticated}}>
           <Navbar />
           <div className="wrapper">
             <Routes>

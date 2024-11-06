@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import "./RegistrationPage.css"
 import "../Auth.css"
 import ErrorPopup from '../../Modals/ErrorPopup/ErrorPopup';
+import { useNavigate } from 'react-router';
+import { Context } from '../../../App';
 
 export default function RegistrationPage() {
     const [formData, setFormData] = useState({
@@ -13,6 +15,8 @@ export default function RegistrationPage() {
         passwordConfirm: '',
     });
 
+    const navigate = useNavigate()
+    const {isAuthenticated, setIsAuthenticated} = useContext(Context);
     const [errorPopupIsOpen, setErrorPopupIsOpen] = useState(false);
     const [errorPopupMessage, setErrorPopupMessage] = useState('')
 
@@ -34,7 +38,7 @@ export default function RegistrationPage() {
         }
 
         try {
-        const response = await fetch('http://localhost:5000/register', {
+        const response = await fetch('/register', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json'
@@ -60,6 +64,7 @@ export default function RegistrationPage() {
 
     return (
         <>
+            {isAuthenticated && navigate('/catalog')}
             <div className="auth--page">
                 <div className="auth--wrapper">
                     <div className="auth--form-container">
