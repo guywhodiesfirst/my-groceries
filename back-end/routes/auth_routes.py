@@ -119,7 +119,8 @@ def register():
 @authRoutes.route('/request_verification', methods=['POST'])
 def request_verification():
     from app import mongo
-    email = request.json.get('email')
+    data = request.get_json()
+    email = data.get('email')
 
     user = mongo.db.users.find_one({'email': email})
     if not user:
@@ -138,8 +139,9 @@ def request_verification():
 @authRoutes.route('/verify_code', methods=['POST'])
 def verify_code():
     from app import mongo
-    email = request.json.get('email')
-    code = request.json.get('code')
+    data = request.get_json()
+    email = data.get('email')
+    code = data.get('code')
 
     user = mongo.db.users.find_one({'email': email})
     if not user:

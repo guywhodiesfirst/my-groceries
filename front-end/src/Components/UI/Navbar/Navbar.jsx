@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react'
 import './Navbar.css'
-import ShoppingCart from '../Modals/ShoppingCart/ShoppingCart'
-import { Context } from '../../App'
+import ShoppingCart from '../../Modals/ShoppingCart/ShoppingCart'
+import { Context } from '../../../App'
 import { useNavigate } from 'react-router'
 
 export default function Navbar() {
@@ -23,7 +23,7 @@ export default function Navbar() {
             <ul className="navbar--menu">
                 <li onClick={() => setCartIsOpen(true)}>Cart</li>
                 <li><a href="/catalog">Browse catalog</a></li>
-                {isAuthenticated && <li><a href="/account">Manage account</a></li>}
+                {isAuthenticated && <li><a href="/account">Account</a></li>}
                 {isAuthenticated ? <li onClick={handleSignOut}>Sign out</li> : <li><a href="/login">Sign in</a></li>}
             </ul>
             {cartIsOpen && (
