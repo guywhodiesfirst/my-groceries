@@ -23,7 +23,7 @@ EMAIL_SENDER = "mrgumor2017@gmail.com"
 EMAIL_PASSWORD = "gqzx swgv cyyo bvle"
 
 
-@adminRoutes.route('/admin/product', methods=['PUT'])
+@adminRoutes.route('/admin/product', methods=['POST'])
 @jwt_required()
 def addProduct():
     from app import mongo
@@ -76,7 +76,7 @@ def deleteProduct():
 
     return jsonify(message="Продукт видалено успішно."), 200
 
-@adminRoutes.route('/admin/product', methods=['POST'])
+@adminRoutes.route('/admin/product', methods=['PUT'])
 @jwt_required()
 def editProduct():
     from app import mongo
