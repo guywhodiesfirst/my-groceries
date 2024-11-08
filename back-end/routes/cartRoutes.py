@@ -18,7 +18,7 @@ EMAIL_PASSWORD = "gqzx swgv cyyo bvle"
 
 
 
-@cartRoutes.route('/cartSum', methods=['POST'])
+@cartRoutes.route('/cartSum', methods=['GET'])
 @jwt_required()
 def cartSum():
     from app import mongo
