@@ -22,8 +22,9 @@ def getCategory():
 @productRoutes.route('/products/<product_id>', methods=['GET'])
 def getProducts(product_id):
     from app import mongo
-    category = request.json.get('category')
-    nameSubstring = request.json.get('name')
+    data = request.get_json(silent=True) or {}
+    category = data.get('category')
+    nameSubstring = data.get('name')
 
     try:
         # Пошук продукта по ID
