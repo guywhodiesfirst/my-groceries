@@ -6,25 +6,27 @@ from flask_jwt_extended import JWTManager, create_access_token, jwt_required, ge
 
 productRoutes = Blueprint('product', __name__)
 
+@productRoutes.route('/products/category', methods=['GET'])
+def getCategory():
+    from app import mongo
+    categories = []
+    categoriesCursor = mongo.db.products.find({}, {'category': 1})
+
+    for product in categoriesCursor:
+        category = product.get('category', [])
+        if category not in categories:
+            categories.append(category)
+    return jsonify({'categories': categories, 'message': 'Пошук пройшов успішно'}), 200
+
 @productRoutes.route('/products', defaults={'product_id': None}, methods=['GET'])
 @productRoutes.route('/products/<product_id>', methods=['GET'])
 def getProducts(product_id):
     from app import mongo
-    category = request.json.get('category')
-    nameSubstring = request.json.get('name')
-    isCatList = request.json.get('categoryList')
+    data = request.get_json(silent=True) or {}
+    category = data.get('category')
+    nameSubstring = data.get('name')
 
     try:
-        if isCatList:
-            categories = []
-            categoriesCursor = mongo.db.products.find({}, {'category': 1})
-
-            for product in categoriesCursor:
-                category = product.get('category', [])
-                if category not in categories:
-                    categories.append(category)
-            return jsonify({'categories': categories, 'message': 'Пошук пройшов успішно'}), 200
-
         # Пошук продукта по ID
         if product_id:
             product = mongo.db.products.find_one({'_id': ObjectId(product_id)})

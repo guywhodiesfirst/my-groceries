@@ -86,10 +86,10 @@ def register():
 
     # Перевірка наявності користувача
     if mongo.db.users.find_one({'email': email}):
-        return jsonify({'message': 'User with this email already exists'}), 409
+        return jsonify({'message': 'Користувач з даною поштою вже існує'}), 409
     
     if mongo.db.users.find_one({'username': username}):
-        return jsonify({'message': 'User with this username already exists'}), 409
+        return jsonify({'message': 'Користувач з даним псевдонімом вже існує'}), 409
 
     mongo.db.users.insert_one({
         'email': email,
@@ -112,7 +112,7 @@ def register():
         'username': username
     })
 
-    return jsonify({'message': 'Користувач зареєстрований! Перевірте електронну пошту та телефон для підтвердження.'}), 201
+    return jsonify({'message': 'Користувач зареєстрований! Перевірте електронну пошту для підтвердження.'}), 201
 
 
 # Окремий шлях для запиту нового коду підтвердження
