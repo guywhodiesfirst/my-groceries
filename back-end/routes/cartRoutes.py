@@ -226,15 +226,41 @@ def confirm_order(order_id, token):
     if 'email' not in user:
         return jsonify(message="Користувача не знайдено."), 404
 
+    # Генеруємо очікуваний токен і перевіряємо його з тим, що отримано
     expected_token = hashlib.sha256(f"{user['email']}{order_id}".encode()).hexdigest()
-
     if token != expected_token:
         return jsonify(message="Невірний токен."), 403
 
-    # Оновлення статусу замовлення на Підтверджено
+    # Оновлення статусу замовлення на "Підтверджено"
     mongo.db.users.update_one(
         {'_id': user['_id'], 'orders._id': ObjectId(order_id)},
         {'$set': {'orders.$.status': 'Confirmed'}}
     )
 
-    return jsonify(message="Замовлення підтверджено успішно."), 200
+    # Знаходимо всіх кур'єрів з is_runner = True
+    runners = mongo.db.users.find({'is_runner': True})
+
+    # Відправка повідомлення кожному кур'єру
+    for runner in runners:
+        runner_email = runner.get('email')
+        if runner_email:
+            send_runner_notification(runner_email, order_id)  # Викликаємо функцію для відправки email
+
+    return jsonify(message="Замовлення підтверджено успішно. Повідомлення кур'єрам надіслано."), 200
+
+
+def send_runner_notification(email, order_id):
+    """Функція для відправки повідомлення кур'єру про нове замовлення."""
+    msg = MIMEMultipart()
+    msg["From"] = EMAIL_SENDER
+    msg["To"] = email
+    msg["Subject"] = "Нове замовлення на доставку"
+
+    body = f"Шановний кур'єре, нове замовлення з номером {order_id} підтверджено та потребує доставки."
+    msg.attach(MIMEText(body, "plain"))
+
+    with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+        server.starttls()
+        server.login(EMAIL_SENDER, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_SENDER, email, msg.as_string())
+
