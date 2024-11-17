@@ -1,13 +1,10 @@
 import './AdminPage.css'
 import { FaBox, FaChartBar, FaUsers, FaCog } from 'react-icons/fa';
-import ProductsTable from './ProductsTable.jsx';
 import SidebarMenu from '../UI/SidebarMenu/SidebarMenu.jsx';
 import { useState } from 'react';
-import data from "../../data"
-import Categories from '../Categories/Categories';
-import SearchBar from '../UI/SearchBar/SearchBar';
 import UsersTable from './UsersTable.jsx';
 import { userData } from '../../users.js';
+import Products from './Products/Products.jsx';
 
 export default function AdminPage() {
   const [activeItem, setActiveItem] = useState('Products');
@@ -20,13 +17,7 @@ export default function AdminPage() {
   ];
 
   const components = {
-    Products: (
-      <>
-        <button className='create-button'>Create new product</button>
-        <Categories data={data} />
-        <ProductsTable products={data} />
-      </>
-    ),
+    Products: <Products />,
     Users: (
       <>
         <button className='create-button'>Add new user</button>
@@ -45,9 +36,6 @@ export default function AdminPage() {
         onSelect={setActiveItem}
       />
       <div className="main-content">
-        {['Products', 'Users'].includes(activeItem) && (
-          <SearchBar name={activeItem} onChange={() => {}} />
-        )}
         {components[activeItem]}
       </div>
     </div>
