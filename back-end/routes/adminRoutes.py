@@ -87,11 +87,11 @@ def editProduct():
 
     # Отримуємо дані для оновлення продукту
     productName = request.json.get('productName')
-    updatedName = request.json.get('newName')
-    updatedPrice = request.json.get('newPrice')
-    updatedQuantity = request.json.get('newQuantity')
-    updatedCategory = request.json.get('newCategory')
-    updatedDescription = request.json.get('newDescription')
+    updatedName = request.json.get('name')
+    updatedPrice = request.json.get('price')
+    updatedQuantity = request.json.get('quantity')
+    updatedCategory = request.json.get('category')
+    updatedDescription = request.json.get('description')
 
     # Перевірка наявності продукту
     product = mongo.db.products.find_one({'name': productName})
@@ -116,24 +116,6 @@ def editProduct():
         mongo.db.products.update_one({'name': productName}, {'$set': updateData})
 
     return jsonify(message="Продукт оновлено успішно"), 200
-
-@adminRoutes.route('/admin/users', methods=['GET']) # Функція для виведення ніків та ID всіх користувачів
-@jwt_required()
-def getUsers():
-    from app import mongo
-    currentUser = get_jwt_identity()
-
-    # Проверка прав администратора
-    if not checkadmin(currentUser):
-        return jsonify(message="Потрібні права адміністратора"), 403
-
-    usersCursor = mongo.db.users.find({}, {"_id": 1, "username": 1})
-    users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersCursor]
-
-    try:
-        return jsonify(users), 200
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
 @adminRoutes.route('/admin/adminPanel', methods=['POST']) #Функція для налаштування рівня доступа
 @jwt_required()
@@ -202,21 +184,23 @@ def delAdmins():
 @jwt_required()
 def getTypesUsers():
     from app import mongo
-    import re
 
     currentUser = get_jwt_identity()
     if not checkadmin(currentUser):
         return jsonify(message="Потрібні права адміністратора"), 403
 
-    # Отримаємо фільтр
-    userType = request.json.get('userType')
+    # Отримуємо тип користувача
+    userType = request.args.get('userType')
 
+    # Виконуємо фільтрацію
     if userType == 'admin':
         usersCursor = mongo.db.users.find({"is_admin": True}, {"_id": 1, "username": 1})
     elif userType == 'runner':
         usersCursor = mongo.db.users.find({"is_runner": True}, {"_id": 1, "username": 1})
     elif userType == 'blocked':
         usersCursor = mongo.db.users.find({"is_blocked": True}, {"_id": 1, "username": 1})
+    elif userType == 'all':
+        usersCursor = mongo.db.users.find({}, {"_id": 1, "username": 1})
     else:
         return jsonify(message="Невідомий тип користувача"), 400
 
@@ -227,6 +211,7 @@ def getTypesUsers():
         return jsonify(users), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 def send_order_status_email(email, order_id, status):
     subject = f"Оновлення статусу замовлення #{order_id}"

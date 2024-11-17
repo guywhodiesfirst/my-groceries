@@ -22,9 +22,10 @@ def getCategory():
 @productRoutes.route('/products/<product_id>', methods=['GET'])
 def getProducts(product_id):
     from app import mongo
-    data = request.get_json(silent=True) or {}
-    category = data.get('category')
-    nameSubstring = data.get('name')
+
+    # Отримання параметрів
+    category = request.args.get('category')
+    nameSubstring = request.args.get('name')
 
     try:
         # Пошук продукта по ID
@@ -35,58 +36,40 @@ def getProducts(product_id):
                 return jsonify({"error": "Продукт не знайдено"}), 404
 
             product['_id'] = str(product['_id'])
-            return jsonify(product), 200
+            return jsonify({
+                "_id": product["_id"],
+                "name": product.get("name", "No name"),
+                "description": product.get("description", "No description"),
+                "quantity": product.get("quantity", "0"),
+                "price": product.get("price", "No price"),
+                "category": product.get("category", "No category")
+            }), 200
 
-        # Фільтрація по категорії
-        elif category:
-            productsCursor = mongo.db.products.find({'category': category})
-            products = [
-                {
-                    "_id": str(product["_id"]),
-                    "name": product.get("name", "No name"),
-                    "description": product.get("description", "No description"),
-                    "quantity": product.get("quantity", "0"),
-                    "price": product.get("price", "No price")
-                }
-                for product in productsCursor
-            ]
-            if not products:
-                return jsonify({'message': 'Продуктів у цій категорії не знайдено'}), 404
-            return jsonify({'products': products, 'message': 'Продукти за категорією знайдено'}), 200
+        # Формування фільтру для запиту
+        queryFilter = {}
+        if category:
+            queryFilter['category'] = category
+        if nameSubstring:
+            queryFilter['name'] = {'$regex': re.escape(nameSubstring), '$options': 'i'}
 
-        # Фільтрація по частині імені
-        elif nameSubstring:
-            productsCursor = mongo.db.products.find(
-                {'name': {'$regex': re.escape(nameSubstring), '$options': 'i'}}
-            )
-            products = [
-                {
-                    "_id": str(product["_id"]),
-                    "name": product.get("name", "No name"),
-                    "description": product.get("description", "No description"),
-                    "quantity": product.get("quantity", "0"),
-                    "price": product.get("price", "No price")
-                }
-                for product in productsCursor
-            ]
-            if not products:
-                return jsonify({'message': 'Продукти не знайдено'}), 404
-            return jsonify({'products': products, 'message': 'Продукти за частиною імені знайдено'}), 200
+        # Виконання запиту з фільтром
+        productsCursor = mongo.db.products.find(queryFilter)
+        products = [
+            {
+                "_id": str(product["_id"]),
+                "name": product.get("name", "No name"),
+                "description": product.get("description", "No description"),
+                "quantity": product.get("quantity", "0"),
+                "price": product.get("price", "No price"),
+                "category": product.get("category", "No category")
+            }
+            for product in productsCursor
+        ]
 
-        # Якщо нічого не задано - повертаємо всві продукти
-        else:
-            productsCursor = mongo.db.products.find()
-            products = [
-                {
-                    "_id": str(product["_id"]),
-                    "name": product.get("name", "No name"),
-                    "description": product.get("description", "No description"),
-                    "quantity": product.get("quantity", "0"),
-                    "price": product.get("price", "No price")
-                }
-                for product in productsCursor
-            ]
-            return jsonify({'products': products, 'message': 'Усі продукти'}), 200
+        if not products:
+            return jsonify({'message': 'Продукти не знайдено'}), 404
+
+        return jsonify({'products': products, 'message': 'Продукти знайдено'}), 200
 
     except Exception as e:
         return jsonify({'error': 'Помилка при отриманні даних', 'details': str(e)}), 500
