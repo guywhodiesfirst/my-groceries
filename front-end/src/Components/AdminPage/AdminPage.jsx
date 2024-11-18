@@ -1,10 +1,9 @@
 import './AdminPage.css'
-import { FaBox, FaChartBar, FaUsers, FaCog } from 'react-icons/fa';
-import SidebarMenu from '../UI/SidebarMenu/SidebarMenu.jsx';
 import { useState } from 'react';
-import UsersTable from './UsersTable.jsx';
-import { userData } from '../../users.js';
-import Products from './Products/Products.jsx';
+import { FaBox, FaChartBar, FaUsers, FaCog } from 'react-icons/fa';
+import SidebarMenu from '../UI/SidebarMenu/SidebarMenu';
+import Products from './Products/Products';
+import Users from './Users/Users';
 
 export default function AdminPage() {
   const [activeItem, setActiveItem] = useState('Products');
@@ -18,12 +17,7 @@ export default function AdminPage() {
 
   const components = {
     Products: <Products />,
-    Users: (
-      <>
-        <button className='create-button'>Add new user</button>
-        <UsersTable users={userData} />
-      </>
-    ),
+    Users: <Users />,
     Analytics: <div>Analytics Content</div>,
     Settings: <div>Settings Content</div>,
   };

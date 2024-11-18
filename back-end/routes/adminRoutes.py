@@ -116,7 +116,7 @@ def editProduct():
 
     return jsonify(message="Продукт оновлено успішно"), 200
 
-@adminRoutes.route('/admin/adminPanel', methods=['POST']) #Функція для налаштування рівня доступа
+@adminRoutes.route('/admin/users', methods=['PATCH']) #Функція для налаштування рівня доступа
 @jwt_required()
 def setUser():
     from app import mongo
@@ -125,18 +125,17 @@ def setUser():
     if not checkadmin(currentUser):
         return jsonify(message="Потрібні права адміністратора"), 403
 
-    userID = request.json.get('user id')
-    isadmin = request.json.get('is admin')
-    isblocked = request.json.get('is blocked')
-    isrunner = request.json.get('is runner')
-    username = request.json.get('username')
+    userID = request.json.get('userId')
+    isadmin = request.json.get('admin')
+    isblocked = request.json.get('blocked')
+    isrunner = request.json.get('runner')
 
     try:
         userID = ObjectId(userID)
     except:
         return jsonify(message="Невірний формат ID користувача"), 400
 
-    user = mongo.db.users.find_one({"_id": userID, "username": username}, {"_id": 1})
+    user = mongo.db.users.find_one({"_id": userID}, {"_id": 1})
 
     if user:
 
@@ -156,32 +155,31 @@ def setUser():
         return jsonify(message="Користувача не знайдено"), 404
 
 
-@adminRoutes.route('/admin/adminPanel', methods=['DELETE'])#Функція для видалення користувача
+@adminRoutes.route('/admin/users', methods=['DELETE'])#Функція для видалення користувача
 @jwt_required()
-def delAdmins():
+def delUser():
     from app import mongo
     currentUser = get_jwt_identity()
 
     if not checkadmin(currentUser):
         return jsonify(message="Потрібні права адміністратора"), 403
 
-    userID = request.json.get('user id')
-    username = request.json.get('username')
+    userID = request.json.get('userId')
 
     try:
         userID = ObjectId(userID)
     except:
         return jsonify(message="Невірний формат ID користувача"), 400
 
-    if mongo.db.users.find_one({"_id": userID, "username": username}, {"_id": 1}):
+    if mongo.db.users.find_one({"_id": userID}, {"_id": 1}):
         mongo.db.users.delete_one({'_id': userID})
         return jsonify("Користувача видалено успішно"), 200
     else:
         return jsonify("Помилка видалення користувача"), 500
 
-@adminRoutes.route('/admin/adminPanel', methods=['GET'])
+@adminRoutes.route('/admin/users', methods=['GET'])
 @jwt_required()
-def getTypesUsers():
+def getUsersByRoles():
     from app import mongo
 
     currentUser = get_jwt_identity()
@@ -190,21 +188,34 @@ def getTypesUsers():
 
     # Отримуємо тип користувача
     userType = request.args.get('userType')
+    dbType = {"_id": 1, "username": 1, "email": 1, "is_admin": 1, "is_runner": 1, "is_blocked": 1}
 
     # Виконуємо фільтрацію
     if userType == 'admin':
-        usersCursor = mongo.db.users.find({"is_admin": True}, {"_id": 1, "username": 1})
+        usersCursor = mongo.db.users.find({"is_admin": True}, dbType)
     elif userType == 'runner':
-        usersCursor = mongo.db.users.find({"is_runner": True}, {"_id": 1, "username": 1})
+        usersCursor = mongo.db.users.find({"is_runner": True}, dbType)
     elif userType == 'blocked':
-        usersCursor = mongo.db.users.find({"is_blocked": True}, {"_id": 1, "username": 1})
-    elif userType == 'all':
-        usersCursor = mongo.db.users.find({}, {"_id": 1, "username": 1})
+        usersCursor = mongo.db.users.find({"is_blocked": True}, dbType)
     else:
-        return jsonify(message="Невідомий тип користувача"), 400
+        usersCursor = mongo.db.users.find({}, dbType)
 
     # Формуємо список
-    users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersCursor]
+    users = []
+    for user in usersCursor:
+        roles = []
+        if user.get("is_admin"):
+            roles.append("admin")
+        if user.get("is_runner"):
+            roles.append("runner")
+        if user.get("is_blocked"):
+            roles.append("blocked")
+        users.append({
+            "_id": str(user["_id"]),
+            "username": user.get("username", "No username"),
+            "email": user.get("email", "No email"),
+            "roles": roles if roles else ["user"]
+        })
 
     try:
         return jsonify(users), 200
