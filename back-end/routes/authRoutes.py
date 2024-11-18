@@ -69,6 +69,8 @@ def send_reset_code(email, code):
         return jsonify({'message': 'Код для відновлення пароля надіслано на ваш email'}), 200
     except Exception as e:
         return jsonify({'message': 'Помилка при надсиланні email'}), 400
+
+
 @authRoutes.route('/register', methods=['POST'])
 def register():
     from app import mongo
@@ -87,16 +89,19 @@ def register():
     # Перевірка наявності користувача
     if mongo.db.users.find_one({'email': email}):
         return jsonify({'message': 'Користувач з даною поштою вже існує'}), 409
-    
+
     if mongo.db.users.find_one({'username': username}):
         return jsonify({'message': 'Користувач з даним псевдонімом вже існує'}), 409
 
+    # Генерація коду підтвердження
     verification_code = generate_verification_code(email)
 
+    # Додавання нового користувача в базу
     mongo.db.users.insert_one({
         'email': email,
         'password': hashedPassword,
         'isVerified': False,
+        'verification_code': verification_code,
         'is_admin': False,
         'is_runner': False,
         'is_blocked': False,
@@ -114,9 +119,10 @@ def register():
         'username': username
     })
 
+    # Надсилання коду підтвердження
     send_verification_code(email, verification_code)
 
-    return jsonify({'message': 'Користувач зареєстрований! Перевірте електронну пошту для підтвердження.'}), 201
+    return jsonify({'message': 'Користувач зареєстрований! Код підтвердження надіслано на вашу електронну пошту.'}), 201
 
 
 # Окремий шлях для запиту нового коду підтвердження
