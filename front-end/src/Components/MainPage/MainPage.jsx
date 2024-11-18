@@ -1,10 +1,11 @@
 import Card from '../Card/Card';
 import './MainPage.css';
 import data from '../../data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from '../Pagination/Pagination';
-import Categories from '../Categories/Categories';
+import FilterList from '../Categories/FilterList.jsx';
 import SearchBar from '../UI/SearchBar/SearchBar.jsx';
+import { ProductsApi } from '../../api/ProductsApi.js';
 
 export default function MainPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,6 +14,18 @@ export default function MainPage() {
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = data.slice(firstItemIndex, lastItemIndex);
+
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const getCategories = async () => {
+    const data = await ProductsApi.getCategories();
+    setCategories(data);
+  };
+
+  useEffect(() => {
+    getCategories().then();
+  }, []);
 
   const cardArray = currentItems.map(itemData => (
     <Card
@@ -41,7 +54,11 @@ export default function MainPage() {
           </div>
         </div>
         <div>
-          <Categories data={data}/>
+          <FilterList
+            items={categories}
+            onSelect={setSelectedCategory}
+            selected={selectedCategory}
+          />
         </div>
       </div>
     </>

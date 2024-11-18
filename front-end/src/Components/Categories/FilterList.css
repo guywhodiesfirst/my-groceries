@@ -1,16 +1,16 @@
-.categories-container {
+.filter-list {
     margin-top: 175px;
 }
 
-.categories-container button {
+.filter-list button {
     margin: 5px;
 }
 
-.categories-container button:hover {
+.filter-list button:hover {
     transform: scale(0.95);
 }
 
-.categories-container h3 {
+.filter-list h3 {
     margin: 0 0 10px 5px;
     font-size: 1.5rem;
 }

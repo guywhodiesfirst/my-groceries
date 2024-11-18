@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ProductsApi } from '../../../api/ProductsApi.js';
-import Categories from '../../Categories/Categories.jsx';
+import FilterList from '../../Categories/FilterList.jsx';
 import ProductsTable from './ProductsTable.jsx';
 import Modal from '../../Modals/Modal.jsx';
 import ProductForm from './ProductForm.jsx';
@@ -51,8 +51,8 @@ export default function Products() {
       <button className="create-button" onClick={handleCreateProduct}>
         Create new product
       </button>
-      <Categories
-        categories={categories}
+      <FilterList
+        items={categories}
         onSelect={setSelectedCategory}
         selected={selectedCategory}
       />
