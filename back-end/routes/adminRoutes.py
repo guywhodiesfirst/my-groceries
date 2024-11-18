@@ -8,7 +8,6 @@ from datetime import datetime
 def checkadmin(currentUser):
     from app import mongo
     user = mongo.db.users.find_one({'email': currentUser})
-    print(user)
     if not user or not user.get('is_admin') == True:
         return False
     else: return True
@@ -64,15 +63,15 @@ def deleteProduct():
         return jsonify(message="Потрібні права адміністратора"), 403
 
     # Отримуємо назву продукту з запиту
-    productName = request.json.get('product name')
+    _id = ObjectId(request.json.get('_id'))
 
     # Перевірка наявності продукту
-    product = mongo.db.products.find_one({'name': productName})
+    product = mongo.db.products.find_one({'_id': _id})
     if not product:
         return jsonify(message="Product not found."), 404
 
     # Видаляємо продукт з бази даних
-    mongo.db.products.delete_one({'name': productName})
+    mongo.db.products.delete_one({'_id': _id})
 
     return jsonify(message="Продукт видалено успішно."), 200
 
@@ -86,7 +85,7 @@ def editProduct():
         return jsonify(message="Потрібні права адміністратора"), 403
 
     # Отримуємо дані для оновлення продукту
-    productName = request.json.get('productName')
+    _id = ObjectId(request.json.get('_id'))
     updatedName = request.json.get('name')
     updatedPrice = request.json.get('price')
     updatedQuantity = request.json.get('quantity')
@@ -94,7 +93,7 @@ def editProduct():
     updatedDescription = request.json.get('description')
 
     # Перевірка наявності продукту
-    product = mongo.db.products.find_one({'name': productName})
+    product = mongo.db.products.find_one({'_id': _id})
     if not product:
         return jsonify(message="Продукт не знайдено"), 404
 
@@ -113,7 +112,7 @@ def editProduct():
 
     # Оновлюємо продукт в базі даних
     if updateData:
-        mongo.db.products.update_one({'name': productName}, {'$set': updateData})
+        mongo.db.products.update_one({'_id': _id}, {'$set': updateData})
 
     return jsonify(message="Продукт оновлено успішно"), 200
 
