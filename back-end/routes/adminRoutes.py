@@ -116,7 +116,7 @@ def editProduct():
 
     return jsonify(message="Продукт оновлено успішно"), 200
 
-@adminRoutes.route('/admin/adminPanel', methods=['POST']) #Функція для налаштування рівня доступа
+@adminRoutes.route('/admin/users', methods=['PATCH']) #Функція для налаштування рівня доступа
 @jwt_required()
 def setUser():
     from app import mongo
@@ -156,7 +156,7 @@ def setUser():
         return jsonify(message="Користувача не знайдено"), 404
 
 
-@adminRoutes.route('/admin/adminPanel', methods=['DELETE'])#Функція для видалення користувача
+@adminRoutes.route('/admin/users', methods=['DELETE'])#Функція для видалення користувача
 @jwt_required()
 def delAdmins():
     from app import mongo
@@ -179,7 +179,7 @@ def delAdmins():
     else:
         return jsonify("Помилка видалення користувача"), 500
 
-@adminRoutes.route('/admin/adminPanel', methods=['GET'])
+@adminRoutes.route('/admin/users', methods=['GET'])
 @jwt_required()
 def getTypesUsers():
     from app import mongo
@@ -198,10 +198,8 @@ def getTypesUsers():
         usersCursor = mongo.db.users.find({"is_runner": True}, {"_id": 1, "username": 1})
     elif userType == 'blocked':
         usersCursor = mongo.db.users.find({"is_blocked": True}, {"_id": 1, "username": 1})
-    elif userType == 'all':
-        usersCursor = mongo.db.users.find({}, {"_id": 1, "username": 1})
     else:
-        return jsonify(message="Невідомий тип користувача"), 400
+        usersCursor = mongo.db.users.find({}, {"_id": 1, "username": 1})
 
     # Формуємо список
     users = [{"_id": str(user["_id"]), "username": user.get("username", "No username")} for user in usersCursor]
