@@ -91,6 +91,8 @@ def register():
     if mongo.db.users.find_one({'username': username}):
         return jsonify({'message': 'Користувач з даним псевдонімом вже існує'}), 409
 
+    verification_code = generate_verification_code(email)
+
     mongo.db.users.insert_one({
         'email': email,
         'password': hashedPassword,
@@ -111,6 +113,8 @@ def register():
         'deliveryPlace': "",
         'username': username
     })
+
+    send_verification_code(email, verification_code)
 
     return jsonify({'message': 'Користувач зареєстрований! Перевірте електронну пошту для підтвердження.'}), 201
 
