@@ -10,4 +10,4 @@ class Config:
 
     # Налаштування безпеки
     BCRYPT_LOG_ROUNDS = 12
-    JWT_ACCESS_TOKEN_EXPIRES = 3600
+    JWT_ACCESS_TOKEN_EXPIRES = 7200
