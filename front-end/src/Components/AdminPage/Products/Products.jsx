@@ -29,7 +29,7 @@ export default function Products() {
 
   useEffect(() => {
     getProducts().then();
-  }, [selectedCategory, name, getProducts]);
+  }, [getProducts]);
 
   const closeModal = async () => {
     setIsModalOpen(false);

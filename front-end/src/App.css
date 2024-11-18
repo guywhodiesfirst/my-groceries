@@ -146,3 +146,72 @@ h2 {
     box-shadow: inset 0 0.8px 0 -0.25px rgba(255, 255, 255, 0.2), 0 0.5px 1px rgba(0, 0, 0, 0.1), 0 0 0 3.5px rgba(58, 108, 217, 0.5);
     outline: 0;
 }
+
+.checkbox-wrapper {
+    --size: 25px;
+    position: relative;
+}
+
+.checkbox-wrapper *,
+.checkbox-wrapper *:before,
+.checkbox-wrapper *:after {
+    box-sizing: border-box;
+}
+
+.checkbox-wrapper .promoted-input-checkbox {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.checkbox-wrapper input:checked ~ svg {
+    height: calc(var(--size) * 0.6);
+    animation: draw-checkbox ease-in-out 0.2s forwards;
+}
+
+.checkbox-wrapper label:active::after {
+    background-color: #e6e6e6;
+}
+
+.checkbox-wrapper label {
+    color: #0080d3;
+    line-height: var(--size);
+    cursor: pointer;
+    position: relative;
+}
+
+.checkbox-wrapper label:after {
+    content: "";
+    height: var(--size);
+    width: var(--size);
+    margin-right: 8px;
+    float: left;
+    border: 2px solid #0080d3;
+    border-radius: 3px;
+    transition: 0.15s all ease-out;
+}
+
+.checkbox-wrapper svg {
+    stroke: #0080d3;
+    stroke-width: 3px;
+    height: 0;
+    width: calc(var(--size) * 0.6);
+    position: absolute;
+    left: calc(var(--size) * 0.21);
+    top: calc(var(--size) * 0.2);
+    stroke-dasharray: 33;
+}
+
+@keyframes draw-checkbox {
+    0% {
+        stroke-dashoffset: 33;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
