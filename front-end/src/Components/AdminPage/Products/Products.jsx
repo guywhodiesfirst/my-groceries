@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ProductsApi } from '../../../api/ProductsApi.js';
 import Categories from '../../Categories/Categories.jsx';
 import ProductsTable from './ProductsTable.jsx';
@@ -18,10 +18,10 @@ export default function Products() {
     setCategories(data);
   };
 
-  const getProducts = async () => {
+  const getProducts = useCallback(async () => {
     const data = await ProductsApi.getProducts({ category: selectedCategory, name });
     setProducts(data);
-  };
+  }, [selectedCategory, name]);
   
   useEffect(() => {
     getCategories().then();
@@ -29,7 +29,7 @@ export default function Products() {
 
   useEffect(() => {
     getProducts().then();
-  }, [selectedCategory, name]);
+  }, [selectedCategory, name, getProducts]);
 
   const closeModal = async () => {
     setIsModalOpen(false);
@@ -56,7 +56,9 @@ export default function Products() {
         onSelect={setSelectedCategory}
         selected={selectedCategory}
       />
-      <ProductsTable products={products} onSubmit={closeModal}/>
+      {products.length
+        ? <ProductsTable products={products} onSubmit={closeModal}/>
+        : <h1>No products found for the given criteria.</h1>}
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ProductForm onSubmit={closeModal} />
