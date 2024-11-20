@@ -50,6 +50,7 @@ export default function AccountPage() {
                                     type="email"
                                     id="email"
                                     value={user.email || ""}
+                                    readOnly
                                 />
                             </div>
                         </div>

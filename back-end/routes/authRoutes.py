@@ -237,6 +237,7 @@ def profile():
 
     if request.method == 'GET':
         return jsonify({
+            'is_admin': user.get('is_admin'),
             'name': user.get('name'),
             'surname': user.get('surname'),
             'username': user.get('username'),
@@ -319,6 +320,3 @@ def view_order_history():
     orders = convert_objectid_to_str(orders)
 
     return jsonify(orderHistory=orders), 200
-
-
-
