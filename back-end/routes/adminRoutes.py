@@ -37,6 +37,7 @@ def addProduct():
     quantity = request.json.get('quantity')
     category = request.json.get('category')
     description = request.json.get('description')
+    image = request.json.get('image')
 
     # Перевірка обов'язкових полів
     if not name or not isinstance(price, (int, float)) or not isinstance(quantity, (int, float)) or not description:
@@ -49,6 +50,7 @@ def addProduct():
         'quantity': quantity,
         'category': category,
         'description': description,
+        'image': image,
     })
 
     return jsonify(message="Продукт додано успішно"), 201
@@ -91,6 +93,7 @@ def editProduct():
     updatedQuantity = request.json.get('quantity')
     updatedCategory = request.json.get('category')
     updatedDescription = request.json.get('description')
+    updatedImage = request.json.get('image')
 
     # Перевірка наявності продукту
     product = mongo.db.products.find_one({'_id': _id})
@@ -109,6 +112,8 @@ def editProduct():
         updateData['category'] = updatedCategory
     if updatedDescription:
         updateData['description'] = updatedDescription
+    if updatedImage:
+        updateData['image'] = updatedImage
 
     # Оновлюємо продукт в базі даних
     if updateData:

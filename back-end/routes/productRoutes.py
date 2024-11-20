@@ -42,7 +42,8 @@ def getProducts(product_id):
                 "description": product.get("description", "No description"),
                 "quantity": product.get("quantity", "0"),
                 "price": product.get("price", "No price"),
-                "category": product.get("category", "No category")
+                "category": product.get("category", "No category"),
+                "image": product.get("image", "No image"),
             }), 200
 
         # Формування фільтру для запиту
@@ -61,7 +62,8 @@ def getProducts(product_id):
                 "description": product.get("description", "No description"),
                 "quantity": product.get("quantity", "0"),
                 "price": product.get("price", "No price"),
-                "category": product.get("category", "No category")
+                "category": product.get("category", "No category"),
+                "image": product.get("image", "No image"),
             }
             for product in productsCursor
         ]

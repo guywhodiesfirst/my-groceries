@@ -60,7 +60,7 @@ export default function MainPage() {
           />
           <div className="cards-container">
             {currentItems.length ? (
-              currentItems.map((item) => <Card key={item.id} {...item} />)
+              currentItems.map((item) => <Card key={item._id} {...item} />)
             ) : (
               <h1>No products found for the given criteria.</h1>
             )}

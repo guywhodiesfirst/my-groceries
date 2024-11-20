@@ -10,6 +10,7 @@ const ProductForm = ({ onSubmit, initialData }) => {
     price: 0,
     quantity: 0,
     category: '',
+    image: '',
     ...initialData,
   });
 
@@ -20,7 +21,7 @@ const ProductForm = ({ onSubmit, initialData }) => {
       value = parseInt(value, 10);
     }
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
@@ -101,12 +102,23 @@ const ProductForm = ({ onSubmit, initialData }) => {
           onChange={handleChange}
         />
       </div>
+      <div>
+        <label>Image URL:</label>
+        <input
+          required
+          className="text-input"
+          type="url"
+          name="image"
+          value={formData.image}
+          onChange={handleChange}
+          placeholder="https://example.com/image.jpg"
+        />
+      </div>
       <button type="submit" className="create-button">
         {initialData ? 'Save Changes' : 'Create Product'}
       </button>
     </form>
   );
-
 };
 
 export default ProductForm;
