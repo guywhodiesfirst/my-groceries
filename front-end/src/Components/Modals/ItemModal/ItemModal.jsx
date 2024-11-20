@@ -8,7 +8,7 @@ export default function ItemModal({ isOpen, onClose, itemData }) {
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="modal--item-wrapper">
         <div>
-          <img src={`/images/${itemData.img}`} className="modal--image"/>
+          <img src={itemData.image} className="modal--image" alt={itemData.name}/>
         </div>
         <ItemModalInfo itemData={itemData}/>
       </div>

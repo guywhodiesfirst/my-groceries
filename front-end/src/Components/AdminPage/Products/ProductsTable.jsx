@@ -42,6 +42,7 @@ const ProductsTable = ({ products, onSubmit }) => {
         <thead>
         <tr>
           <th>ID</th>
+          <th>Image</th>
           <th>Name</th>
           <th>Description</th>
           <th>Price</th>
@@ -55,18 +56,31 @@ const ProductsTable = ({ products, onSubmit }) => {
         {products.map((product) => (
           <tr key={product._id}>
             <td>{product._id}</td>
+            <td>
+              <img
+                src={product.image}
+                alt={product.name}
+                className="table-image"
+              />
+            </td>
             <td>{product.name}</td>
             <td>{product.description}</td>
             <td>${product.price}</td>
             <td>{product.quantity}</td>
             <td>{product.category}</td>
             <td>
-              <button className="edit-button" onClick={() => handleEdit(product)}>
+              <button
+                className="edit-button"
+                onClick={() => handleEdit(product)}
+              >
                 Edit
               </button>
             </td>
             <td>
-              <button className="edit-button" onClick={() => handleDelete(product)}>
+              <button
+                className="edit-button"
+                onClick={() => handleDelete(product)}
+              >
                 Delete
               </button>
             </td>
@@ -79,13 +93,19 @@ const ProductsTable = ({ products, onSubmit }) => {
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           {isDeleteModal ? (
             <>
-              <h3>Are you sure you want to delete the product with ID: {selectedProduct?._id}?</h3>
+              <h3>
+                Are you sure you want to delete the product with ID:{' '}
+                {selectedProduct?._id}?
+              </h3>
               <button className="create-button" onClick={confirmDelete}>
                 Yes, delete
               </button>
             </>
           ) : (
-            <ProductForm initialData={selectedProduct} onSubmit={handleFormSubmit} />
+            <ProductForm
+              initialData={selectedProduct}
+              onSubmit={handleFormSubmit}
+            />
           )}
         </Modal>
       )}
