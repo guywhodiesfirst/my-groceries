@@ -6,3 +6,49 @@
 .profile-data h2 {
     font-size: large;
 }
+
+.account-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .account-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .form-section {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-section h2 {
+    font-weight: bold;
+    font-size: 18px;
+    margin-bottom: 0;
+  }
+  
+  .form-row {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  
+  .form-group label {
+    margin-bottom: 5px;
+  }
+  
+  input {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }

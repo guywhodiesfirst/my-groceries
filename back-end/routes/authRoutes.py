@@ -122,7 +122,7 @@ def register():
     # Надсилання коду підтвердження
     send_verification_code(email, verification_code)
 
-    return jsonify({'message': 'Користувач зареєстрований! Код підтвердження надіслано на вашу електронну пошту.'}), 201
+    return jsonify({'message': 'Користувач зареєстрований! Код підтвердження надіслано на вашу електронну пошту. Введіть його на сторінці користувача'}), 201
 
 
 # Окремий шлях для запиту нового коду підтвердження
@@ -240,6 +240,7 @@ def profile():
             'name': user.get('name'),
             'surname': user.get('surname'),
             'username': user.get('username'),
+            'email': user.get('email'),
             'phoneNumber': user.get('phoneNumber'),
             'cardNumber': user.get('cardNumber'),
             'cardDate': user.get('cardDate'),

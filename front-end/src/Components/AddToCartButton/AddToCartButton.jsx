@@ -2,23 +2,24 @@ import { useContext } from "react";
 import { Context } from "../../App";
 
 export default function AddToCartButton({ itemData }) {
-    const {orders, setOrders} = useContext(Context)
-    const addToOrder = (item) => {
-        let isInArray = false
-        orders.forEach(element => {
-            if(element.id === item.id)
-                isInArray = true
-        });
-        
-        if(!isInArray) setOrders([...orders, item]);
-    }
+    const { setOrders } = useContext(Context);
 
-    return(
+    const addToOrder = (item) => {
+        setOrders((prevOrders) => {
+            const isInArray = prevOrders.some((element) => element.id === item.id);
+            if (!isInArray) {
+                return [...prevOrders, item];
+            }
+            return prevOrders;
+        });
+    };
+
+    return (
         <button
             onClick={() => addToOrder(itemData)}
-            className="btn"    
+            className="btn"
         >
             Add to cart
         </button>
-    ) 
+    );
 }
