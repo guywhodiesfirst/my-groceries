@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import "./RegistrationPage.css"
 import "../Auth.css"
 import ErrorPopup from '../../Modals/ErrorPopup/ErrorPopup';
+import { useNavigate } from 'react-router';
+import { Context } from '../../../App';
 
 export default function RegistrationPage() {
     const [formData, setFormData] = useState({
@@ -13,8 +15,61 @@ export default function RegistrationPage() {
         passwordConfirm: '',
     });
 
+    const navigate = useNavigate()
+    const {isAuthenticated, setIsAuthenticated} = useContext(Context);
+    const [verificationCode, setVerificationCode] = useState('')
+    const [isCodeSent, setIsCodeSent] = useState(false)
     const [errorPopupIsOpen, setErrorPopupIsOpen] = useState(false);
     const [errorPopupMessage, setErrorPopupMessage] = useState('')
+
+
+    const handleVerificationCodeChange = (event) => {
+        setVerificationCode(event.target.value)
+    }
+
+    const sendVerificationCode = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/request_verification', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: formData.email}),
+            })
+            const data = await response.json()
+            if(response.ok) {
+                setIsCodeSent(true)
+            } else {
+                throw new Error(data.message)
+            }
+        } catch (error) {
+            setErrorPopupMessage(error.message)
+            setErrorPopupIsOpen(true)
+        }
+    }
+
+    const verifyCode = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/verify_code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: formData.email,
+                    code: verificationCode
+                })
+            })
+
+            const data = await response.json()
+            if(response.ok) {
+                alert(response.message)
+            }
+        } catch(error) {
+            setErrorPopupMessage(error.message)
+            setErrorPopupIsOpen(true)
+        }
+    }
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -54,12 +109,16 @@ export default function RegistrationPage() {
             setErrorPopupIsOpen(true)
             setErrorPopupMessage('Error occured during registration.');
         }
+
+        sendVerificationCode()
     };
 
     const allFieldsFilled = Object.values(formData).every((field) => field.trim() !== "");
 
+
     return (
         <>
+            {isAuthenticated && navigate('/catalog')}
             <div className="auth--page">
                 <div className="auth--wrapper">
                     <div className="auth--form-container">
@@ -84,6 +143,12 @@ export default function RegistrationPage() {
                 </div>
                 
             </div>
+            {isCodeSent && (
+                <div className="verification-container">
+                    <input type="text" placeholder="Enter Verification Code" value={verificationCode} onChange={handleVerificationCodeChange} required />
+                    <button onClick={verifyCode}>Verify Code</button>
+                </div>
+            )}
             <ErrorPopup 
                 isOpen={errorPopupIsOpen}
                 onClose={() => setErrorPopupIsOpen(false)}

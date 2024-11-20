@@ -1,5 +1,5 @@
 .pagination--btn-group {
-    margin: 20px 0px 0px 20px;
+    margin-top: 20px;
     display: flex;
     gap: 10px;
 }

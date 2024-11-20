@@ -1,0 +1,8 @@
+.profile-data {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-data h2 {
+    font-size: large;
+}

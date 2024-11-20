@@ -5,7 +5,7 @@ import ShoppingCartOrder from '../../ShoppingCartOrder/ShoppingCartOrder';
 
 export default function ShoppingCartOrderList() {
     
-    const [orders, setOrders] = useContext(Context)
+    const {orders, setOrders} = useContext(Context)
     return(
         <>
             <p className='shopping-cart--title poppins'>Cart</p>
