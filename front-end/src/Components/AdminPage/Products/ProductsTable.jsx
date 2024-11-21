@@ -65,7 +65,7 @@ const ProductsTable = ({ products, onSubmit }) => {
             </td>
             <td>{product.name}</td>
             <td>{product.description}</td>
-            <td>${product.price}</td>
+            <td>₴{product.price}</td>
             <td>{product.quantity}</td>
             <td>{product.category}</td>
             <td>
