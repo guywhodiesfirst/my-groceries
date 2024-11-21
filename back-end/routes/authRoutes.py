@@ -238,6 +238,7 @@ def profile():
     if request.method == 'GET':
         return jsonify({
             'is_admin': user.get('is_admin'),
+            'isVerified': user.get('isVerified'),
             'name': user.get('name'),
             'surname': user.get('surname'),
             'username': user.get('username'),

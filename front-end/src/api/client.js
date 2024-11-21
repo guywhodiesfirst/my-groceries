@@ -16,10 +16,11 @@ export const client = async (url, options = {}) => {
   });
 
   if (!response.ok) {
+    const errorResponse = await response.json()
     return {
       error: true,
       status: response.status,
-      message: `HTTP error! status: ${response.status}`,
+      message: errorResponse.message,
     };
   }
 

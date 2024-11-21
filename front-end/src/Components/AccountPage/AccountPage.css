@@ -47,8 +47,35 @@
     margin-bottom: 5px;
   }
   
-  input {
-    padding: 8px;
-    border: 1px solid #ccc;
+
+
+  .verification-section {
+    padding: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    margin-bottom: 20px;
     border-radius: 4px;
-  }
+}
+
+.verification-section h2 {
+    font-size: 1.8rem;
+    color: #dc3545;
+}
+
+.verification-section p {
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+}
+
+.verification-section .form-group {
+    margin-bottom: 15px;
+}
+
+.verification-section .form-group input {
+    width: 60%;
+}
+
+.account--btn-container {
+    display: flex;
+    gap: 14px;
+}

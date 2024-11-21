@@ -9,34 +9,25 @@ export class AuthApi {
             });
     
             if (response.error) {
-                throw new Error(response.message);
+                return { success: false, message: response.message }
             }
     
-            return { success: true };
+            return { success: true, message: response.message };
         } catch (error) {
-            throw new Error(error.message);
+            return { success: false, message: error.message }
         }
     }
-    
 
     static async verifyCode(email, code) {
-        try {
-            const response = await client('verify_code', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, code }),
-            });
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message);
-            }
-            return { success: true, message: data.message };
-        } catch (error) {
-            throw new Error(error.message);
-        }
-    }
+        const response = await client('verify_code', {
+          method: 'POST',
+          body: JSON.stringify({ email, code }),
+        });
+    
+        return response.error
+          ? { success: false, message: response.message }
+          : { success: true, message: response.message };
+      }
 
     static async register(formData) {
         if (formData.password !== formData.passwordConfirm) {
