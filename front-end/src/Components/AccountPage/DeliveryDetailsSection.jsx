@@ -16,6 +16,11 @@ export default function DeliveryDetailsSection({
     });
 
     const [fullAddress, setFullAddress] = useState(user.deliveryPlace || '');
+    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState('');
+
+    const handleDeliveryMethodChange = (event) => {
+        setSelectedDeliveryMethod(event.target.value);
+    };
 
     const getAddressString = () => {
         return Object.values(addressData)
@@ -40,10 +45,10 @@ export default function DeliveryDetailsSection({
 
     const allFieldsFilled = Object.values(addressData).every((field) => field.trim() !== '');
 
-    const handleSaveAddress = async (event) => {
+    const handleSaveDeliveryDetails = async (event) => {
         event.preventDefault();
         if (allFieldsFilled) {
-            const updatedUser = { ...user, deliveryPlace: fullAddress }; 
+            const updatedUser = { ...user, deliveryPlace: fullAddress, deliveryMethod: selectedDeliveryMethod }; 
             const result = await AuthApi.update(updatedUser);
             if (!result.success) {
                 setErrorPopupIsOpen(true);
@@ -67,6 +72,13 @@ export default function DeliveryDetailsSection({
 
             {showDeliveryDetails && (
                 <>
+                    <div className='dropdown-container'>
+                        <label htmlFor="delivery-dropdown">Select a delivery method:</label>
+                        <select id="delivery-dropdown" value={selectedDeliveryMethod} onChange={handleDeliveryMethodChange}>
+                            <option value="courier">Courier</option>
+                            <option value="post-office">Post office</option>
+                        </select>
+                    </div>
                     <div className="form-row">
                         <div className="form-group">
                             <label htmlFor="full-address">Full address</label>
@@ -132,8 +144,8 @@ export default function DeliveryDetailsSection({
                             />
                         </div>
                     </div>
-                    <button type="button" className="btn" disabled={!allFieldsFilled} onClick={handleSaveAddress}>
-                        Save address
+                    <button type="button" className="btn" disabled={!allFieldsFilled} onClick={handleSaveDeliveryDetails}>
+                        Save delivery details
                     </button>
                 </>
             )}
