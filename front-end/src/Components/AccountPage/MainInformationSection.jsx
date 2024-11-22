@@ -80,7 +80,7 @@ export default function MainInformationSection({ user }) {
                     />
                 </div>
             </div>
-            <button type="button" className="btn" onClick={handleSaveMainInfo}>
+            <button type="submit" className="btn" onClick={handleSaveMainInfo}>
                 Save main information
             </button>
         </div>

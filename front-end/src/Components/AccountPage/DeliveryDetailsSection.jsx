@@ -7,7 +7,7 @@ export default function DeliveryDetailsSection({
     setErrorPopupIsOpen,
     setErrorPopupMessage, 
 }) {
-    const [showDeliveryDetails, setShowDeliveryDetails] = useState(!!user.deliveryPlace);
+    const [showDeliveryDetails, setShowDeliveryDetails] = useState((!!user.deliveryPlace || !!user.deliveryMethod));
     const [addressData, setAddressData] = useState({
         region: '',
         city: '',
@@ -144,7 +144,7 @@ export default function DeliveryDetailsSection({
                             />
                         </div>
                     </div>
-                    <button type="button" className="btn" disabled={!allFieldsFilled} onClick={handleSaveDeliveryDetails}>
+                    <button type="submit" className="btn" onClick={handleSaveDeliveryDetails}>
                         Save delivery details
                     </button>
                 </>

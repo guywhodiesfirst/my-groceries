@@ -7,6 +7,7 @@ import ErrorPopup from "../Modals/ErrorPopup/ErrorPopup";
 import VerificationSection from "./VerificationSection";
 import DeliveryDetailsSection from "./DeliveryDetailsSection";
 import MainInformationSection from "./MainInformationSection";
+import PaymentDetailsSection from "./PaymentDetailsSection";
 
 export default function AccountPage() {
     const { user } = useContext(Context);
@@ -67,51 +68,15 @@ export default function AccountPage() {
                         <div>
                             <DeliveryDetailsSection 
                                 user={user}
-                                verificationCode={verificationCode}
-                                setVerificationCode={setVerificationCode}
                                 setErrorPopupIsOpen={setErrorPopupIsOpen}
                                 setErrorPopupMessage={setErrorPopupMessage}
                             />
 
-                            <div className="form-section">
-                                <h2>Payment details</h2>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="card-number">Card number</label>
-                                        <input
-                                            className="text-input"
-                                            type="text"
-                                            id="card-number"
-                                            value={user.cardNumber || ""}
-                                            placeholder="1111 1111 1111 1111"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="expiration-date">Expiration date</label>
-                                        <input
-                                            className="text-input"
-                                            type="text"
-                                            id="expiration-date"
-                                            value={user.cardDate || ""}
-                                            placeholder="01/30"
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="cvv">CVV</label>
-                                        <input
-                                            className="text-input"
-                                            type="text"
-                                            id="cvv"
-                                            value={user.cardCVV || ""}
-                                            placeholder="***"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <button type="button" className="btn">
-                                Save details
-                            </button>
+                            <PaymentDetailsSection 
+                                user={user}
+                                setErrorPopupIsOpen={setErrorPopupIsOpen}
+                                setErrorPopupMessage={setErrorPopupMessage}
+                            />
                         </div>
                     </form>
                 ) : (
