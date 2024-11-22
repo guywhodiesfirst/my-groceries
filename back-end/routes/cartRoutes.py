@@ -91,12 +91,48 @@ def cart():
 
 
     if request.method == 'GET':
-        # Отримання товарів з кошика
-        cartItems = [
-            {'productId': str(item['productId']), 'quantity': item.get('quantity', 1)}
-            for item in user.get('cart', [])
-        ]
-        return jsonify(cartItems), 200
+        # Перевіряємо, чи у користувача є кошик
+        cart = user.get('cart', [])
+        if not cart:
+            return jsonify(message="Кошик порожній"), 200
+
+        # Ініціалізуємо список для збереження детальної інформації про товари
+        cartDetails = []
+
+        # Проходимо по кожному товару в кошику
+        for item in cart:
+            try:
+                # Конвертуємо `productId` в `ObjectId`
+                productId = ObjectId(item['productId'])
+                quantity = item.get('quantity', 1)
+
+                # Отримуємо деталі товару з бази
+                product = mongo.db.products.find_one({'_id': productId})
+
+                if product:
+                    # Додаємо деталі товару до списку
+                    cartDetails.append({
+                        'productId': str(product['_id']),
+                        'name': product.get('name', 'Невідомий товар'),
+                        'image': product.get('image', ''),
+                        'price': product.get('price', 0),
+                        'quantity': quantity,
+                        'total': product.get('price', 0) * quantity
+                    })
+                else:
+                    cartDetails.append({
+                        'productId': str(productId),
+                        'name': 'Товар не знайдено',
+                        'image': '',
+                        'price': 0,
+                        'quantity': quantity,
+                        'total': 0
+                    })
+
+            except Exception as e:
+                return jsonify(message=f"Помилка при отриманні даних для товару: {str(e)}"), 500
+
+        return jsonify(cartDetails), 200
 
     if request.method == 'POST':
         productId = request.json.get('productId')

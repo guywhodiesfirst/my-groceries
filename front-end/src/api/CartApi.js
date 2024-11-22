@@ -9,7 +9,7 @@ export class CartApi {
             console.log('error ', data.message)
             return []
         }
-        return data.cartItems || []
+        return data || []
     }
 
     static async addToCart(productId) {

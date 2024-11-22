@@ -13,7 +13,6 @@ export default function ShoppingCartOrderList() {
 
     useEffect(() => {
         getOrders().then()
-        console.log(orders)
     }, [])
 
     return(

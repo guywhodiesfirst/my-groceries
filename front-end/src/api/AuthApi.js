@@ -66,7 +66,6 @@ export class AuthApi {
 
     static async update(userData) {
         try {
-            console.log(userData)
             const response = await client('profile', {
                 method: 'PUT',
                 body: JSON.stringify(userData),
