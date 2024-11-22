@@ -38,7 +38,7 @@ export default function VerificationSection({
     return (
         <div className="verification-section">
             <h2>Account Not Verified</h2>
-            <p>Your account is not verified yet. Please enter the verification code sent to your email: {$user.email}.</p>
+            <p>Your account is not verified yet. Please enter the verification code sent to your email: {user.email}.</p>
             <form onSubmit={handleVerificationSubmit}>
                 <div className="form-group">
                     <label htmlFor="verification-code">Verification Code</label>
