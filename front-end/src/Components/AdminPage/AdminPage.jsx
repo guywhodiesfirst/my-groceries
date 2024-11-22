@@ -1,9 +1,11 @@
 import './AdminPage.css'
-import { useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { FaBox, FaChartBar, FaUsers, FaCog } from 'react-icons/fa';
 import SidebarMenu from '../UI/SidebarMenu/SidebarMenu';
 import Products from './Products/Products';
 import Users from './Users/Users';
+import { Context } from '../../App';
+import { useNavigate } from 'react-router';
 
 export default function AdminPage() {
   const [activeItem, setActiveItem] = useState('Products');
@@ -22,16 +24,27 @@ export default function AdminPage() {
     Settings: <div>Settings Content</div>,
   };
 
+  const { user } = useContext(Context)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (user && !user.is_admin) {
+      navigate('/catalog');
+    }
+  }, [user, navigate]);
+
   return (
-    <div className="admin-page">
-      <SidebarMenu
-        menuItems={menuItems}
-        active={activeItem}
-        onSelect={setActiveItem}
-      />
-      <div className="main-content">
-        {components[activeItem]}
+    <>
+      <div className="admin-page">
+        <SidebarMenu
+          menuItems={menuItems}
+          active={activeItem}
+          onSelect={setActiveItem}
+        />
+        <div className="main-content">
+          {components[activeItem]}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

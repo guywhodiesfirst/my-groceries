@@ -266,8 +266,8 @@ def profile():
         deliveryPlace = request.json.get('deliveryPlace')
 
         # Перевірка на наявність всіх необхідних полів
-        if not all([phoneNumber, name, surname, cardNumber, cardDate, cardCVV, deliveryMethod, paymentMethod]):
-            return jsonify(message="Всі поля повинні бути заповнені."), 422
+        if not all([name, surname, username]):
+            return jsonify(message="Всі обов'язкові поля повинні бути заповнені."), 422
 
         # Оновлення документа користувача
         result = mongo.db.users.update_one(

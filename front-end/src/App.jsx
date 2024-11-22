@@ -27,12 +27,6 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => {
-    if (user) {
-      console.log("User data:", user);
-    }
-  }, [user]);
-
   const fetchUserProfile = async (token) => {
     try {
       const response = await fetch("http://localhost:5000/profile", {

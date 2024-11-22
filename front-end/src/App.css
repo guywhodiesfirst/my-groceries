@@ -221,3 +221,8 @@ input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+
+input:read-only {
+    background-color: #e4e4e4;
+    cursor: not-allowed;
+}
