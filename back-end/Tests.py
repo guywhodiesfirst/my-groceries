@@ -25,19 +25,22 @@ class TestAPIEndpoints(unittest.TestCase):
             return bearerToken
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запита: {e}")
+
     def testLogin(self):
         self.assertIsNotNone(self.bearerToken, "Не вдалось отримати токен")
+
+    def message(self,response):
+        print(f"Запит відправлено на: {response.url}")
+        print(f"Відповідь: {response.text}")
+        self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
 
     # Функція для тестування можливості отримання всього списку користувачів
     def testAdminUsersAll(self):
         url = f"{self.base_url}/admin/users"
         headers = {"Authorization": f"Bearer {self.bearerToken}"}
-
         try:
             response = requests.get(url, headers=headers)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message (response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -49,9 +52,7 @@ class TestAPIEndpoints(unittest.TestCase):
         try:
             queryParams = {"userType": "admin"}
             response = requests.get(url, headers=headers, params=queryParams)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -63,9 +64,7 @@ class TestAPIEndpoints(unittest.TestCase):
         try:
             queryParams = {"userType": "blocked"}
             response = requests.get(url, headers=headers, params=queryParams)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -77,9 +76,7 @@ class TestAPIEndpoints(unittest.TestCase):
         try:
             queryParams = {"userType": "runner"}
             response = requests.get(url, headers=headers, params=queryParams)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -89,9 +86,7 @@ class TestAPIEndpoints(unittest.TestCase):
         headers = {"Authorization": f"Bearer {self.bearerToken}"}
         try:
             response = requests.patch(url, headers=headers, json={"userId": "672a579b74d698604d84bb9a", "admin": True, "runner": True})
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -121,7 +116,7 @@ class TestAPIEndpoints(unittest.TestCase):
             self.fail(f"Помилка при виконанні запиту: {e}")
 
     # Функція для тестування можливості видалення товару з бази
-    #Знаходить товар з категорії testCat та видаляє перший у списку
+    # Знаходить товар з категорії testCat та видаляє перший у списку
     def testAdminUsersProductDeleteAlternative(self):
         import json
         url = f"{self.base_url}/admin/product"
@@ -132,9 +127,7 @@ class TestAPIEndpoints(unittest.TestCase):
             data = data.json()
             firstID = data["products"][0]["_id"]
             response = requests.delete(url, headers=headers,json={"_id": firstID})
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався коректно")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -143,9 +136,7 @@ class TestAPIEndpoints(unittest.TestCase):
         url = f"{self.base_url}/products/category"
         try:
             response = requests.get(url)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -154,9 +145,7 @@ class TestAPIEndpoints(unittest.TestCase):
         url = f"{self.base_url}/products/6740105e68acda1d9e5f43fe"
         try:
             response = requests.get(url)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -165,9 +154,7 @@ class TestAPIEndpoints(unittest.TestCase):
         url = f"{self.base_url}/products?name=hydrogen bomb"
         try:
             response = requests.get(url)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
@@ -176,9 +163,7 @@ class TestAPIEndpoints(unittest.TestCase):
         url = f"{self.base_url}/products?category=weapons of mass destruction"
         try:
             response = requests.get(url)
-            print(f"Запит відправлено на: {response.url}")
-            print(f"Відповідь: {response.text}")
-            self.assertEqual(response.status_code, 200, f"Тест виконався з помилкою: статус-код {response.status_code}")
+            self.message(response)
         except requests.exceptions.RequestException as e:
             self.fail(f"Помилка при виконанні запиту: {e}")
 
