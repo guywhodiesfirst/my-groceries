@@ -18,8 +18,8 @@
 
 .order--item-info {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
 }
 
 .order--item-title {
@@ -30,4 +30,19 @@
 .order--item-price {
     font-size: medium;
     font-weight: bold;
+    float: right;
+}
+
+.order--quantity-controls {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.order--quantity-controls button {
+    padding: 8px 15px;
+}
+
+.order--quantity-controls input {
+    width: 60px;
 }

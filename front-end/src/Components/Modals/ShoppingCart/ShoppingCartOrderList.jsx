@@ -1,11 +1,20 @@
-import { useContext } from "react"
+import { useContext, useEffect, useState } from "react"
 import { Context } from "../../../App"
 import './ShoppingCart.css'
 import ShoppingCartOrder from '../../ShoppingCartOrder/ShoppingCartOrder';
+import { CartApi } from "../../../api/CartApi";
 
 export default function ShoppingCartOrderList() {
-    
-    const {orders, setOrders} = useContext(Context)
+    const [orders, setOrders] = useState([])
+    const getOrders = async () => {
+        const cart = await CartApi.getCart()
+        setOrders(cart)
+    }
+
+    useEffect(() => {
+        getOrders().then()
+    }, [])
+
     return(
         <>
             <p className='shopping-cart--title poppins'>Cart</p>

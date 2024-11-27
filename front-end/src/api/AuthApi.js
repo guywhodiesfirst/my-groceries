@@ -63,4 +63,21 @@ export class AuthApi {
             };
         }
     }
+
+    static async update(userData) {
+        try {
+            const response = await client('profile', {
+                method: 'PUT',
+                body: JSON.stringify(userData),
+            });
+
+            if (response.error) {
+                return { success: false, message: response.message };
+            }
+
+            return { success: true, message: response.message };
+        } catch (error) {
+            return { success: false, message: 'Error occurred during update. ' + error.message };
+        }
+    }
 }
