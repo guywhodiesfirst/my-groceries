@@ -13,7 +13,7 @@ export default function Analytics() {
   }, []);
 
   return (
-    <div className="analytics-content">
+    <div>
       {stats ? (
         <>
           <h3>Monthly Orders: {stats.monthly_orders}</h3>
@@ -22,7 +22,7 @@ export default function Analytics() {
           <h3>Total Sales: ${stats.total_sales.toFixed(2)}</h3>
         </>
       ) : (
-        <p>Loading analytics...</p>
+        <h1>Loading analytics...</h1>
       )}
     </div>
   );
