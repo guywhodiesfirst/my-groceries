@@ -1,8 +1,7 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../../App";
 import "./AccountPage.css";
 import Checkbox from "../UI/Checkbox/Checkbox";
-import { AuthApi } from "../../api/AuthApi";
 import ErrorPopup from "../Modals/ErrorPopup/ErrorPopup";
 import VerificationSection from "./VerificationSection";
 import DeliveryDetailsSection from "./DeliveryDetailsSection";
@@ -15,7 +14,6 @@ export default function AccountPage() {
     const [verificationCode, setVerificationCode] = useState("");
     const [errorPopupIsOpen, setErrorPopupIsOpen] = useState(false);
     const [errorPopupMessage, setErrorPopupMessage] = useState('');
-    const [showPaymentDetails, setShowPaymentDetails] = useState(false)
     
     return (
         <>
@@ -80,7 +78,7 @@ export default function AccountPage() {
                         </div>
                     </form>
                 ) : (
-                    <p>User data not available</p>
+                    <h3>Loading...</h3>
                 )}
             </div>
             <ErrorPopup

@@ -7,11 +7,11 @@ export class AuthApi {
                 method: 'POST',
                 body: JSON.stringify({ email }),
             });
-    
+
             if (response.error) {
                 return { success: false, message: response.message }
             }
-    
+
             return { success: true, message: response.message };
         } catch (error) {
             return { success: false, message: error.message }
@@ -23,7 +23,7 @@ export class AuthApi {
           method: 'POST',
           body: JSON.stringify({ email, code }),
         });
-    
+
         return response.error
           ? { success: false, message: response.message }
           : { success: true, message: response.message };
@@ -79,5 +79,11 @@ export class AuthApi {
         } catch (error) {
             return { success: false, message: 'Error occurred during update. ' + error.message };
         }
+    }
+
+    static async getUserProfile() {
+      return client('profile', {
+        method: 'GET',
+      });
     }
 }
