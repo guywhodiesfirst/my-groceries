@@ -1,9 +1,10 @@
-import './AdminPage.css'
+import './AdminPage.css';
 import { useContext, useState, useEffect } from 'react';
-import { FaBox, FaChartBar, FaUsers, FaCog } from 'react-icons/fa';
+import { FaBox, FaChartBar, FaUsers } from 'react-icons/fa';
 import SidebarMenu from '../UI/SidebarMenu/SidebarMenu';
 import Products from './Products/Products';
 import Users from './Users/Users';
+import Analytics from './Analytics';
 import { Context } from '../../App';
 import { useNavigate } from 'react-router';
 
@@ -14,18 +15,16 @@ export default function AdminPage() {
     { name: 'Products', icon: <FaBox /> },
     { name: 'Users', icon: <FaUsers /> },
     { name: 'Analytics', icon: <FaChartBar /> },
-    { name: 'Settings', icon: <FaCog /> },
   ];
 
   const components = {
     Products: <Products />,
     Users: <Users />,
-    Analytics: <div>Analytics Content</div>,
-    Settings: <div>Settings Content</div>,
+    Analytics: <Analytics />,
   };
 
-  const { user } = useContext(Context)
-  const navigate = useNavigate()
+  const { user } = useContext(Context);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (user && !user.is_admin) {
@@ -41,9 +40,7 @@ export default function AdminPage() {
           active={activeItem}
           onSelect={setActiveItem}
         />
-        <div className="main-content">
-          {components[activeItem]}
-        </div>
+        <div className="main-content">{components[activeItem]}</div>
       </div>
     </>
   );

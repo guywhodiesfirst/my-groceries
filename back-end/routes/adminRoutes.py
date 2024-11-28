@@ -284,9 +284,9 @@ def admin_update_order_status(order_id):
     else:
         return jsonify(message="Помилка при оновленні статусу замовлення."), 500
 
-@adminRoutes.route('/admin/order_statistics', methods=['GET'])
+@adminRoutes.route('/admin/statistics', methods=['GET'])
 @jwt_required()
-def get_order_statistics():
+def get_statistics():
     from app import mongo
     currentUser = get_jwt_identity()
     if not checkadmin(currentUser):
