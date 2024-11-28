@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './ShoppingCartOrder.css';
 
-export default function ShoppingCartOrder({ itemData, onQuantityChange }) {
+export default function ShoppingCartOrder({ itemData, onQuantityChange, handleRemove }) {
     const [quantity, setQuantity] = useState(itemData.quantity || 1);
 
     const handleIncrease = () => {
@@ -40,6 +40,7 @@ export default function ShoppingCartOrder({ itemData, onQuantityChange }) {
                         min="1"
                     />
                     <button className="quantity--increase btn" onClick={handleIncrease}>+</button>
+                    <button className="btn remove-order" onClick={() => handleRemove(itemData.productId)}>✕</button>
                 </div>
             </div>
         </div>

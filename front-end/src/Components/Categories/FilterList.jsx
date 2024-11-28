@@ -1,6 +1,6 @@
 import './FilterList.css';
 
-export default function FilterList({ items, onSelect, selected }) {
+export default function FilterList({ items, onSelect, onClearSelection, selected }) {
   return (
     <div className="filter-list">
       <h3>Filter items</h3>
@@ -8,7 +8,14 @@ export default function FilterList({ items, onSelect, selected }) {
         <button
           className={`btn ${selected === item ? 'btn-active' : ''}`}
           key={item}
-          onClick={() => onSelect(selected === item ? null : item)}
+          onClick={() => {
+            if (selected === item) {
+              onClearSelection(item);
+              onSelect(null);
+            } else {
+              onSelect(item);
+            }
+          }}
         >
           {item}
         </button>

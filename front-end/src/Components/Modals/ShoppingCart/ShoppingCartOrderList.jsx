@@ -8,26 +8,32 @@ export default function ShoppingCartOrderList() {
     const [orders, setOrders] = useState([])
     const getOrders = async () => {
         const cart = await CartApi.getCart()
+        console.log(cart)
         setOrders(cart)
     }
 
     useEffect(() => {
         getOrders().then()
     }, [])
+    
+    const handleRemoveOrder = async (productId) => {
+        await CartApi.removeFromCart({ productId: productId });
+        getOrders()
+    }
 
     return(
         <>
             <p className='shopping-cart--title poppins'>Cart</p>
             <div className='shopping-cart--order-list'>
-                {orders.length === 0 ? (
-                    <p>Here your cart orders will be displayed</p>
-                ) : (
+                { orders ? (
                     <>
                         {orders.map((order, index) => (
-                            <ShoppingCartOrder key={index} itemData={order} />
+                            <ShoppingCartOrder key={index} itemData={order} handleRemove={handleRemoveOrder}/>
                         ))}
                         <button className="btn" style={{marginTop: "12px", float: "right"}}>Proceed to payment</button>
                     </>
+                ) : (
+                    <p>Here your cart orders will be displayed</p>
                 )}
             </div>
         </>

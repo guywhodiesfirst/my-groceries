@@ -18,4 +18,11 @@ export class CartApi {
             body: JSON.stringify(productId),
         });
     }
+
+    static async removeFromCart(productId) {
+        return client('cart', {
+            method: 'DELETE',
+            body: JSON.stringify(productId)
+        })
+    }
 }

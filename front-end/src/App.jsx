@@ -19,14 +19,28 @@ export default function App() {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
   
-    if (token) {
-      setIsAuthenticated(true);
-      fetchUserProfile(token);
-    } else {
-      setIsAuthenticated(false);
+    if (isTokenValid(token)) {
+        setIsAuthenticated(true);
+        fetchUserProfile(token);
+      } else {
+        setIsAuthenticated(false);
+        if(token) {
+          localStorage.removeItem("access_token")
+        }
+      }
+    }, []);
+  
+  const isTokenValid = (token) => {
+    if(!token) return false;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]))
+      const currentTime = Math.floor(Date.now() / 1000)
+      return payload.exp > currentTime
+    } catch (error) {
+      console.log("Invalid token: ", error)
+      return false;
     }
-  }, []);
-
+  } 
   const fetchUserProfile = async (token) => {
     try {
       const response = await fetch("http://localhost:5000/profile", {
@@ -40,11 +54,9 @@ export default function App() {
         setUser(data);
       } else {
         console.error("Failed to fetch user data");
-        alert("Failed to fetch user data");
       }
     } catch(error) {
       console.error("Failure during user fetch:", error);
-      alert("Failure during user fetch");
     }
   };
 

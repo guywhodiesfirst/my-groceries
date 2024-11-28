@@ -43,6 +43,10 @@ export default function MainPage() {
     setName(e.target.value);
   };
 
+  const handleClearSelection = () => {
+    setSelectedCategory(null)
+  }
+
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
   const currentItems = products.slice(firstItemIndex, lastItemIndex);
@@ -70,6 +74,7 @@ export default function MainPage() {
           <FilterList
             items={categories}
             onSelect={setSelectedCategory}
+            onClearSelection={handleClearSelection}
             selected={selectedCategory}
           />
         </div>
