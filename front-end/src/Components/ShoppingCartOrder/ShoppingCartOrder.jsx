@@ -7,21 +7,22 @@ export default function ShoppingCartOrder({ itemData, onQuantityChange, handleRe
     const handleIncrease = () => {
         const newQuantity = quantity + 1;
         setQuantity(newQuantity);
-        //onQuantityChange(itemData.id, newQuantity); // Якщо потрібна синхронізація з батьківським компонентом
+        onQuantityChange(itemData.productId, 1);
     };
 
     const handleDecrease = () => {
         if (quantity > 1) {
             const newQuantity = quantity - 1;
             setQuantity(newQuantity);
-            //onQuantityChange(itemData.id, newQuantity); // Синхронізація
+            onQuantityChange(itemData.productId, -1);
         }
     };
 
     const handleInputChange = (e) => {
         const newQuantity = Math.max(1, parseInt(e.target.value, 10) || 1);
         setQuantity(newQuantity);
-        //onQuantityChange(itemData.id, newQuantity); // Синхронізація
+        const quantityDiff = newQuantity - quantity
+        onQuantityChange(itemData.productId, quantityDiff);
     };
 
     return (

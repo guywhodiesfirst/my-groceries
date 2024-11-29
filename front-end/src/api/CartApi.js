@@ -25,4 +25,14 @@ export class CartApi {
             body: JSON.stringify(productId)
         })
     }
+
+    static async updateQuantity(productId, quantityDiff) {
+        return client('cart', {
+            method: 'PUT',
+            body: JSON.stringify({
+                productId: productId,
+                quantityToAdd: quantityDiff
+            })
+        })
+    }
 }

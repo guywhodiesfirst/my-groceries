@@ -13,6 +13,7 @@ export default function MainPage() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const getCategories = async () => {
     const data = await ProductsApi.getCategories();
@@ -20,11 +21,16 @@ export default function MainPage() {
   };
 
   const getProducts = useCallback(async () => {
-    const data = await ProductsApi.getProducts({
-      category: selectedCategory,
-      name,
-    });
-    setProducts(data);
+    setLoading(true);
+    try {
+      const data = await ProductsApi.getProducts({
+        category: selectedCategory,
+        name,
+      });
+      setProducts(data);
+    } finally {
+      setLoading(false);
+    }
   }, [selectedCategory, name]);
 
   useEffect(() => {
@@ -52,33 +58,33 @@ export default function MainPage() {
   const currentItems = products.slice(firstItemIndex, lastItemIndex);
 
   return (
-    <>
-      <div className="main-page">
-        <div className="catalog">
-          <SearchBar name="Products" onChange={handleSearchChange} />
-          <Pagination
-            totalItems={products.length}
-            itemsPerPage={itemsPerPage}
-            handlePageChange={handlePageChange}
-            currentPage={currentPage}
-          />
-          <div className="cards-container">
-            {currentItems.length ? (
-              currentItems.map((item) => <Card key={item._id} {...item} />)
-            ) : (
-              <h1>No products found for the given criteria.</h1>
-            )}
-          </div>
-        </div>
-        <div>
-          <FilterList
-            items={categories}
-            onSelect={setSelectedCategory}
-            onClearSelection={handleClearSelection}
-            selected={selectedCategory}
-          />
+    <div className="main-page">
+      <div className="catalog">
+        <SearchBar name="Products" onChange={handleSearchChange} />
+        <Pagination
+          totalItems={products.length}
+          itemsPerPage={itemsPerPage}
+          handlePageChange={handlePageChange}
+          currentPage={currentPage}
+        />
+        <div className="cards-container">
+          {loading ? (
+            <h1>Loading...</h1>
+          ) : currentItems.length ? (
+            currentItems.map((item) => <Card key={item._id} {...item} />)
+          ) : (
+            <h1>No products found for the given criteria.</h1>
+          )}
         </div>
       </div>
-    </>
+      <div>
+        <FilterList
+          items={categories}
+          onSelect={setSelectedCategory}
+          onClearSelection={handleClearSelection}
+          selected={selectedCategory}
+        />
+      </div>
+    </div>
   );
 }

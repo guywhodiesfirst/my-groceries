@@ -21,6 +21,11 @@ export default function ShoppingCartOrderList() {
         getOrders()
     }
 
+    const handleQuantityChange = async (productId, quantityDiff) => {
+        console.log(productId)
+        await CartApi.updateQuantity(productId, quantityDiff);
+    }
+
     return(
         <>
             <p className='shopping-cart--title poppins'>Cart</p>
@@ -28,7 +33,7 @@ export default function ShoppingCartOrderList() {
                 { orders ? (
                     <>
                         {orders.map((order, index) => (
-                            <ShoppingCartOrder key={index} itemData={order} handleRemove={handleRemoveOrder}/>
+                            <ShoppingCartOrder key={index} itemData={order} handleRemove={handleRemoveOrder} onQuantityChange={handleQuantityChange}/>
                         ))}
                         <button className="btn" style={{marginTop: "12px", float: "right"}}>Proceed to payment</button>
                     </>

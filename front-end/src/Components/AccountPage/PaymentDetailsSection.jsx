@@ -56,8 +56,8 @@ export default function PaymentDetailsSection({
             <div className="form-section">
                 <h2>Payment details</h2>
                 <div className='dropdown-container'>
-                    <label htmlFor="delivery-dropdown">Select a payment method:</label>
-                    <select id="delivery-dropdown" value={selectedPaymentMethod} onChange={handlePaymentMethodChange}>
+                    <label htmlFor="payment-dropdown">Select a payment method:</label>
+                    <select id="payment-dropdown" value={selectedPaymentMethod} onChange={handlePaymentMethodChange}>
                         <option value="card">Card</option>
                         <option value="apple-pay">Apple Pay</option>
                         <option value="google-pay">Google Pay</option>

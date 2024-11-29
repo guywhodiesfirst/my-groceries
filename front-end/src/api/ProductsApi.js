@@ -44,4 +44,10 @@ export class ProductsApi {
       body: JSON.stringify({ _id: id }),
     })
   }
+
+  static async getStats() {
+    return client('admin/statistics', {
+      method: 'GET',
+    });
+  }
 }

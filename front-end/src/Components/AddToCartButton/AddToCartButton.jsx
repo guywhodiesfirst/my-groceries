@@ -8,12 +8,12 @@ export default function AddToCartButton({ itemData }) {
             const response = await CartApi.addToCart({ productId: itemData._id });
 
             if (response.error) {
-                setError(response.message);
+                alert(response.message);
             } else {
                 console.log("Продукт додано до кошика");
             }
         } catch (e) {
-            setError("Неможливо додати продукт до кошика. Спробуйте пізніше.");
+            alert("Неможливо додати продукт до кошика. Спробуйте пізніше.");
         }
     };
 
