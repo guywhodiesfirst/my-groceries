@@ -12,6 +12,7 @@ export default function Products() {
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const getCategories = async () => {
     const data = await ProductsApi.getCategories();
@@ -19,10 +20,15 @@ export default function Products() {
   };
 
   const getProducts = useCallback(async () => {
-    const data = await ProductsApi.getProducts({ category: selectedCategory, name });
-    setProducts(data);
+    setLoading(true);
+    try {
+      const data = await ProductsApi.getProducts({ category: selectedCategory, name });
+      setProducts(data);
+    } finally {
+      setLoading(false);
+    }
   }, [selectedCategory, name]);
-  
+
   useEffect(() => {
     getCategories().then();
   }, []);
@@ -56,9 +62,13 @@ export default function Products() {
         onSelect={setSelectedCategory}
         selected={selectedCategory}
       />
-      {products.length
-        ? <ProductsTable products={products} onSubmit={closeModal}/>
-        : <h1>No products found for the given criteria.</h1>}
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : products.length ? (
+        <ProductsTable products={products} onSubmit={closeModal} />
+      ) : (
+        <h1>No products found for the given criteria.</h1>
+      )}
       {isModalOpen && (
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <ProductForm onSubmit={closeModal} />

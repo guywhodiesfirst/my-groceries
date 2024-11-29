@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import './Users.css'
+import './Users.css';
 import UsersTable from './UsersTable.jsx';
 import { UsersApi } from '../../../api/UsersApi.js';
 import FilterList from '../../Categories/FilterList.jsx';
@@ -13,6 +13,7 @@ export default function Users() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [roles, setRoles] = useState({ admin: false, runner: false, blocked: false });
+  const [loading, setLoading] = useState(false);
 
   const types = ['admin', 'runner', 'blocked'];
 
@@ -24,8 +25,13 @@ export default function Users() {
   };
 
   const getUsers = useCallback(async () => {
-    const data = await UsersApi.getUsers(selectedType);
-    setUsers(data);
+    setLoading(true);
+    try {
+      const data = await UsersApi.getUsers(selectedType);
+      setUsers(data);
+    } finally {
+      setLoading(false);
+    }
   }, [selectedType]);
 
   useEffect(() => {
@@ -48,9 +54,14 @@ export default function Users() {
   };
 
   const confirmDelete = async () => {
-    await UsersApi.deleteUser(selectedUser._id);
-    setUsers((prevUsers) => prevUsers.filter((user) => user._id !== selectedUser._id));
-    closeModal();
+    setLoading(true);
+    try {
+      await UsersApi.deleteUser(selectedUser._id);
+      setUsers((prevUsers) => prevUsers.filter((user) => user._id !== selectedUser._id));
+      closeModal();
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRoleChange = (role, value) => {
@@ -59,21 +70,28 @@ export default function Users() {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    const user = {
-      userId: selectedUser._id,
-      ...roles,
-    };
-
-    await UsersApi.changeRoles(user);
-    closeModal();
-    getUsers().then();
+    setLoading(true);
+    try {
+      const user = {
+        userId: selectedUser._id,
+        ...roles,
+      };
+      await UsersApi.changeRoles(user);
+      closeModal();
+      getUsers().then();
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
       <FilterList items={types} selected={selectedType} onSelect={setSelectedType} />
-      <UsersTable users={users} onEdit={handleEdit} onDelete={handleDelete} />
+      {loading ? (
+        <h1>Loading...</h1>
+      ) : (
+        <UsersTable users={users} onEdit={handleEdit} onDelete={handleDelete} />
+      )}
 
       {isUpdating && (
         <Modal isOpen={isUpdating} onClose={closeModal}>
