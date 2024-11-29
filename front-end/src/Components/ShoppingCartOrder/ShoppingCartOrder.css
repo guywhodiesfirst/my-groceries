@@ -46,3 +46,19 @@
 .order--quantity-controls input {
     width: 60px;
 }
+
+button.remove-order {
+    height:40px;
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border-color: red;
+    color: red;
+}
+
+button.remove-order:hover {
+    background-color: red;
+    color: white;
+}

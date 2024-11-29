@@ -16,7 +16,7 @@ export default function DeliveryDetailsSection({
     });
 
     const [fullAddress, setFullAddress] = useState(user.deliveryPlace || '');
-    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState('');
+    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState(user.deliveryMethod || 'courier');
 
     const handleDeliveryMethodChange = (event) => {
         setSelectedDeliveryMethod(event.target.value);

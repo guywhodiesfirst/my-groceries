@@ -1,0 +1,8 @@
+.order-payment-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-payment-details--p {
+    font-weight: bold;
+}

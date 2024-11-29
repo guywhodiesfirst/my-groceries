@@ -46,7 +46,7 @@ def cartSum():
 
         except Exception as e:
             return jsonify(message=f"Помилка при обробці товару з ID {item.get('productId')}: {str(e)}"), 500
-
+    
     return jsonify(totalSum=totalSum), 200
 
 
@@ -59,23 +59,19 @@ def cart():
     user = mongo.db.users.find_one({'email': currentUser})
 
     if request.method == 'PUT':
-        # Отримуємо назву продукту та кількість із запиту
-        productName = request.json.get('product name')
-        quantityToAdd = request.json.get('quantity', 1)  # Додаємо 1, якщо кількість не вказана
-
+        # Отримуємо ID продукту та кількість із запиту
+        productId = request.json.get('productId')
+        quantityToAdd = request.json.get('quantityToAdd', 1)  # Додаємо 1, якщо кількість не вказана
         # Перевіряємо наявність товару в базі даних
-        product = mongo.db.products.find_one({'name': productName})
-
+        product = mongo.db.products.find_one({'_id': ObjectId(productId)})
         # Перевіряємо, чи існує продукт та достатня його кількість
         if not product or product.get("quantity", 0) < quantityToAdd:
             return jsonify(message="Продукт не знайдено або він закінчився."), 404
-
         # Перевіряємо, чи є продукт вже у кошику
         cartItem = mongo.db.users.find_one(
             {'email': currentUser, 'cart.productId': product['_id']},
             {'cart.$': 1}  # Повертаємо лише елемент кошика, якщо він існує
         )
-
         if cartItem:  # Якщо продукт вже у кошику, збільшуємо кількість
             mongo.db.users.update_one(
                 {'email': currentUser, 'cart.productId': product['_id']},
