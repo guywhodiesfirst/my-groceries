@@ -42,7 +42,7 @@ export default function ShoppingCartOrderList() {
         <>
             <p className='shopping-cart--title poppins'>Cart</p>
             <div className='shopping-cart--order-list'>
-                { orders ? (
+                { orders.length > 0 ? (
                     <>
                         {orders.map((order, index) => (
                             <ShoppingCartOrder key={index} itemData={order} handleRemove={handleRemoveOrder} onQuantityChange={handleQuantityChange}/>

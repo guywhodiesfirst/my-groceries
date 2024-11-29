@@ -2,14 +2,17 @@ import { client } from "./client.js";
 
 export class CartApi {
     static async getCart() {
-        const data = client('cart', {
+        const data = await client('cart', {
             method: 'GET',
         })
         if (data.error) {
             console.log('error ', data.message)
             return []
         }
-        return data || []
+        if (Array.isArray(data) && data.length > 0) {
+            return data
+        }
+        return []
     }
 
     static async addToCart(productId) {
