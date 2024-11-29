@@ -168,6 +168,28 @@ class TestAPIEndpoints(unittest.TestCase):
             self.fail(f"Помилка при виконанні запиту: {e}")
 
 
+    # Тест для спроби отримати неіснуючий продукт
+    def testGetNonExistentProductByID(self):
+        product_id = "000000000000000000000000"  # Некоректний ID
+        url = f"{self.base_url}/products/{product_id}"
+        try:
+            response = requests.get(url)
+            self.assertEqual(response.status_code, 404, "Некоректний статус-код для неіснуючого продукту")
+            self.message(response)
+        except requests.exceptions.RequestException as e:
+            self.fail(f"Помилка при виконанні запиту: {e}")
+
+    # Тест для перевірки обробки некоректного ID
+    def testGetProductByInvalidID(self):
+        product_id = "invalid_id"
+        url = f"{self.base_url}/products/{product_id}"
+        try:
+            response = requests.get(url)
+            self.assertEqual(response.status_code, 500, "Некоректний статус-код для невалідного ID")
+            self.message(response)
+        except requests.exceptions.RequestException as e:
+            self.fail(f"Помилка при виконанні запиту: {e}")
+
     def tearDown(self):
         self.bearerToken = None
 
