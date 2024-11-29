@@ -7,6 +7,7 @@ import AccountPage from './Components/AccountPage/AccountPage';
 import RegistrationPage from './Components/Auth/RegistrationPage/RegistrationPage';
 import LoginPage from './Components/Auth/LoginPage/LoginPage';
 import AdminPage from './Components/AdminPage/AdminPage';
+import PaymentPage from './Components/PaymentPage/PaymentPage.jsx'
 import { AuthApi } from './api/AuthApi.js';
 
 export const Context = React.createContext();
@@ -52,6 +53,7 @@ export default function App() {
             <Route path="/register" element={<RegistrationPage/>}/>
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/admin" element={<AdminPage/>}/>
+            <Route path="/payment" element={<PaymentPage />}/>
           </Routes>
         </div>
       </Context.Provider>

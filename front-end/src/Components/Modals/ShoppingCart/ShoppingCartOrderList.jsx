@@ -49,7 +49,7 @@ export default function ShoppingCartOrderList() {
                         ))}
                         <div className="shopping-cart--summary">
                             <p className="total-sum">To pay: {totalSum} UAH</p>
-                            <button className="btn">Proceed to payment</button>
+                            <a href="/payment"><button className="btn shopping-cart--proceed-btn">Proceed to payment</button></a>
                         </div>
                         
                     </>

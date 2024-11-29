@@ -10,7 +10,6 @@ import PaymentDetailsSection from "./PaymentDetailsSection";
 
 export default function AccountPage() {
     const { user } = useContext(Context);
-
     const [verificationCode, setVerificationCode] = useState("");
     const [errorPopupIsOpen, setErrorPopupIsOpen] = useState(false);
     const [errorPopupMessage, setErrorPopupMessage] = useState('');

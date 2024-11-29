@@ -4,9 +4,11 @@ import ShoppingCartOrderList from './ShoppingCartOrderList';
 import Modal from '../Modal';
 
 export default function ShoppingCart({ isOpen, onClose }) {
-  return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ShoppingCartOrderList/>
-    </Modal>
-  );
+    return (
+        <>
+            <Modal isOpen={isOpen} onClose={onClose}>
+                <ShoppingCartOrderList />
+            </Modal>
+        </>
+    );
 }

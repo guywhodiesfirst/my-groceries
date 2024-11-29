@@ -46,4 +46,15 @@ export class CartApi {
         }
         return response.totalSum || 0
     }
+
+    static async confirmPayment(deliveryAddress, paymentMethod, orderDetails) {
+        return client('checkout', {
+            method: 'POST',
+            body: JSON.stringify({
+                deliveryAddress: deliveryAddress,
+                paymentMethod: paymentMethod,
+                orderDetails: orderDetails
+            })
+        })
+    }
 }
