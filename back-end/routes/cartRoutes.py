@@ -46,7 +46,7 @@ def cartSum():
 
         except Exception as e:
             return jsonify(message=f"Помилка при обробці товару з ID {item.get('productId')}: {str(e)}"), 500
-
+    
     return jsonify(totalSum=totalSum), 200
 
 

@@ -35,4 +35,15 @@ export class CartApi {
             })
         })
     }
+
+    static async getCartSum() {
+        const response = await client('cartSum', {
+            method: 'GET'
+        })
+        if(response.error) {
+            console.log('error', response.message)
+            return 0
+        }
+        return response.totalSum || 0
+    }
 }

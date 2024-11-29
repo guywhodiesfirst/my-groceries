@@ -6,24 +6,36 @@ import { CartApi } from "../../../api/CartApi";
 
 export default function ShoppingCartOrderList() {
     const [orders, setOrders] = useState([])
+    const [totalSum, setTotalSum] = useState(0)
+
     const getOrders = async () => {
         const cart = await CartApi.getCart()
-        console.log(cart)
         setOrders(cart)
     }
 
+    const getTotalSum = async () => {
+        const sum = await CartApi.getCartSum()
+        setTotalSum(sum)
+    }
+
     useEffect(() => {
-        getOrders().then()
+        const fetchCartData = async () => {
+            await getOrders();
+            await getTotalSum();
+        };
+    
+        fetchCartData();
     }, [])
     
     const handleRemoveOrder = async (productId) => {
         await CartApi.removeFromCart({ productId: productId });
         getOrders()
+        getTotalSum()
     }
 
     const handleQuantityChange = async (productId, quantityDiff) => {
-        console.log(productId)
         await CartApi.updateQuantity(productId, quantityDiff);
+        getTotalSum()
     }
 
     return(
@@ -35,7 +47,11 @@ export default function ShoppingCartOrderList() {
                         {orders.map((order, index) => (
                             <ShoppingCartOrder key={index} itemData={order} handleRemove={handleRemoveOrder} onQuantityChange={handleQuantityChange}/>
                         ))}
-                        <button className="btn" style={{marginTop: "12px", float: "right"}}>Proceed to payment</button>
+                        <div className="shopping-cart--summary">
+                            <p className="total-sum">To pay: {totalSum} UAH</p>
+                            <button className="btn">Proceed to payment</button>
+                        </div>
+                        
                     </>
                 ) : (
                     <p>Here your cart orders will be displayed</p>
